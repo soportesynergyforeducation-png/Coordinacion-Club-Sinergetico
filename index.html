@@ -3342,13 +3342,16 @@ function giDate(raw){
   return null;
 }
 function giISO(raw){const d=giDate(raw);if(!d)return null;return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
-function giDisp(raw){return(raw||'').trim().replace(/\s*\d{1,2}\s*(am|pm)(\s*\/\s*\d{1,2}\s*(am|pm))?/gi,'').trim();}
+function giDisp(raw){
+  return(raw||'').trim()
+    .replace(/\s*\d{1,2}\s*(?:am|pm)(?:\s*(?:\/\/|\/)\s*\d{1,2}\s*(?:am|pm))?/gi,'')
+    .replace(/\s*\/\/\s*/g,' ').replace(/\s+/g,' ').trim();
+}
 function giHorario(raw){
-  const m=(raw||'').match(/(\d{1,2}\s*(?:am|pm))(?:\s*\/\s*(\d{1,2}\s*(?:am|pm)))?/i);
+  const m=(raw||'').match(/(\d{1,2})\s*(am|pm)(?:\s*(?:\/\/|\/)\s*(\d{1,2})\s*(am|pm))?/i);
   if(!m)return'';
-  const a=m[1].trim().toUpperCase().replace(/([APM]+)/,'$1').replace(/(\d+)\s*/,'$1 ');
-  const b=m[2]?m[2].trim().toUpperCase().replace(/(\d+)\s*/,'$1 '):'';
-  return b?`${a} – ${b}`:a;
+  const fmt=(n,s)=>`${n} ${s.toUpperCase()}`;
+  return m[3]?`${fmt(m[1],m[2])} – ${fmt(m[3],m[4])}`:fmt(m[1],m[2]);
 }
 function esURL(v){return/https?:\/\//i.test(v||'');}
 function esBasura(v){const s=(v||'').trim();return!s||s==='000'||s===','||/^\d+$/.test(s)||esURL(s);}
