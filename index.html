@@ -3431,9 +3431,32 @@ function renderGiras(){
 
 function giVerEnCal(iso){Cal.date=new Date(iso+'T12:00:00');Cal.mode='mes';navigate('calendario');toast('Abriendo en calendario','info');}
 
+function _ampmTo24(str){
+  const m=(str||'').match(/(\d{1,2})\s*(am|pm)/i);
+  if(!m)return null;
+  let h=+m[1];const pm=m[2].toLowerCase()==='pm';
+  if(pm&&h!==12)h+=12;if(!pm&&h===12)h=0;
+  return String(h).padStart(2,'0')+':00';
+}
+function _giEventos(g){
+  const base={color:giraColor(g.nombre),desc:[g.hotel,g.dir].filter(Boolean).join(' · '),enlace:'',invitados:'',notas:'',_gira:true,ts:0};
+  const suffix=g.tipo==='especial'?' ⭐':'';
+  const id=g.nombre.replace(/\W+/g,'_');
+  // Parse two times from horario "10 AM – 6 PM"
+  const times=(g.horario||'').match(/(\d{1,2}\s*(?:am|pm))/gi)||[];
+  if(times.length>=2){
+    const h1=_ampmTo24(times[0]),h2=_ampmTo24(times[1]);
+    return[
+      {...base,id:'gira_'+id+'_1',titulo:g.nombre+suffix+' ('+times[0].trim().toUpperCase()+')',fecha:g.fecha_iso,horaI:h1||'10:00',horaF:h2||'14:00'},
+      {...base,id:'gira_'+id+'_2',titulo:g.nombre+suffix+' ('+times[1].trim().toUpperCase()+')',fecha:g.fecha_iso,horaI:h2||'18:00',horaF:String(Math.min(+(h2||'18:00').split(':')[0]+3,23)).padStart(2,'0')+':00'},
+    ];
+  }
+  const h1=times[0]?_ampmTo24(times[0]):null;
+  return[{...base,id:'gira_'+id,titulo:g.nombre+suffix,fecha:g.fecha_iso,horaI:h1||'10:00',horaF:h1?String(Math.min(+(h1.split(':')[0])+3,23)).padStart(2,'0')+':00':'20:00'}];
+}
 function _giSyncCal(){
   const evs=JSON.parse(localStorage.getItem('cs_eventos')||'[]').filter(e=>!e._gira);
-  const giEvs=_girasRaw.filter(g=>g.fecha_iso).map(g=>({id:'gira_'+g.nombre.replace(/\W+/g,'_'),titulo:g.nombre+(g.tipo==='especial'?' ⭐':''),fecha:g.fecha_iso,horaI:'10:00',horaF:'20:00',color:giraColor(g.nombre),desc:[g.hotel,g.dir].filter(Boolean).join(' · '),enlace:'',invitados:'',notas:'',_gira:true,ts:0}));
+  const giEvs=_girasRaw.filter(g=>g.fecha_iso).flatMap(g=>_giEventos(g));
   localStorage.setItem('cs_eventos',JSON.stringify([...evs,...giEvs]));
   const active=document.querySelector('.view.active');
   if(active?.id==='view-calendario')renderCal();
