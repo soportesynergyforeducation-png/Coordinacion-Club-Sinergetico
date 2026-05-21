@@ -1290,7 +1290,7 @@ tbody tr:hover{background:var(--bg-hover)}
     <button onclick="toggleGemini()" style="background:rgba(255,255,255,.15);border:none;color:#fff;cursor:pointer;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;transition:background .15s" onmouseover="this.style.background='rgba(255,255,255,.25)'" onmouseout="this.style.background='rgba(255,255,255,.15)'">✕</button>
   </div>
   <div class="gem-msgs" id="gemMsgs">
-    <div class="gem-msg ai">¡Hola! Soy tu asistente del Club Sinergético<br><br>Puedo ayudarte a generar <strong>ideas para temas</strong>, <strong>copys para WhatsApp/Telegram</strong>, <strong>preguntas para tu audiencia</strong> o cualquier cosa relacionada con tus mentorías.</div>
+    <div class="gem-msg ai">¡Hola! Soy tu coordinador académico IA del Club Sinergético.<br><br>Tengo acceso a los datos reales de tus mentorías pasadas. Puedo ayudarte a:<br><br>📊 <strong>Analizar tendencias</strong> de audiencia y retención<br>💡 <strong>Identificar qué temas</strong> generaron más impacto<br>🎯 <strong>Dar consejos específicos</strong> por tipo de mentoría o mentor<br>✍️ <strong>Generar ideas y copys</strong> para próximas sesiones<br><br>¿Qué quieres analizar o mejorar hoy?</div>
   </div>
   <div class="gem-input-row">
     <input type="text" id="gemInput" placeholder="¿En qué te ayudo hoy?" onkeydown="if(event.key==='Enter')sendGemini()"/>
@@ -2612,7 +2612,38 @@ function renderSearchResults(q, containerId){
 // ============ ASISTENTE GROQ ============
 function _getGroqKey(){ return localStorage.getItem('groq_api_key') || ''; }
 const _ORURL = 'https://api.groq.com/openai/v1/chat/completions';
-const _ORSYS = `Eres un asistente experto del Club Sinergético. Ayudas al equipo de coordinación con consultas de información textual, ideas para temas de mentoría, redacción de copys para WhatsApp y Telegram, preguntas para enganchar a la audiencia, estrategias de contenido y difusión, y análisis de retroalimentación. Responde siempre en español mexicano, de forma clara, concisa y práctica. Los tipos de mentoría del club son: Lunes de Principiante (12pm), Lunes Sinergético (7pm), Martes de Estrategia Digital (7pm), Miércoles de Creación de Contenido (7pm), Jueves de Estrategia de Venta (7pm), Viernes de Caso de Éxito (4pm).`;
+const _ORSYS = `Eres un coordinador académico experimentado del Club Sinergético con años de experiencia diseñando y mejorando programas de mentoría en línea. Tu rol es analizar los datos reales de las mentorías pasadas y dar consejos concretos, accionables y estratégicos al equipo de coordinación.
+
+Tienes acceso al historial completo de retroalimentación de las mentorías: audiencias, observaciones del público, ideas clave y preguntas frecuentes del chat. Usa estos datos para responder con base en evidencia real, no suposiciones.
+
+Cuando analices datos:
+- Identifica patrones de retención de audiencia (inicial vs media vs final)
+- Detecta temas que generaron más engagement o preguntas
+- Señala áreas de mejora específicas por tipo de mentoría o mentor
+- Propón acciones concretas con base en lo observado
+- Usa lenguaje directo y profesional, como lo haría un coordinador con experiencia
+
+Tipos de mentoría del club: Lunes de Principiante (12pm), Lunes Sinergético (7pm), Martes de Estrategia Digital (7pm), Miércoles de Creación de Contenido (7pm), Jueves de Estrategia de Venta (7pm), Viernes de Caso de Éxito (4pm).
+
+Responde siempre en español mexicano, de forma clara, estructurada y práctica. Cuando no haya suficientes datos para un análisis, dilo honestamente y sugiere qué información recopilar.`;
+
+function _buildRetroContext(){
+  const sesiones = S.sessions.filter(s => s.aud_inicial || s.aud_media || s.aud_final || s.obs_pub || s.ideas || s.preguntas);
+  if(!sesiones.length) return '';
+  const lines = sesiones.slice().sort((a,b)=>(b.fecha||'').localeCompare(a.fecha||'')).map(s => {
+    const m = S.mentors.find(x=>x.id===s.mentor)||{};
+    const tipo = TIPOS[s.tipo_mentoria]||{};
+    const partes = [
+      `• [${fdate(s.fecha)}] ${tipo.label||s.tipo_mentoria||'Mentoría'} — "${s.tema||'Sin tema'}" — Mentor: ${m.nombre||'—'}`,
+      (s.aud_inicial||s.aud_media||s.aud_final) ? `  Audiencia: Inicial ${s.aud_inicial||'—'} → Media ${s.aud_media||'—'} → Final ${s.aud_final||'—'}` : null,
+      s.obs_pub ? `  Observaciones del público: ${s.obs_pub}` : null,
+      s.ideas ? `  Ideas importantes: ${s.ideas}` : null,
+      s.preguntas ? `  Preguntas frecuentes en chat: ${s.preguntas}` : null,
+    ];
+    return partes.filter(Boolean).join('\n');
+  });
+  return `\n\n---\nDATOS REALES DE RETROALIMENTACIÓN (${sesiones.length} mentorías con datos):\n\n${lines.join('\n\n')}`;
+}
 
 function toggleMobileSearch(){
   const overlay=document.getElementById('mobileSearchOverlay');
@@ -2760,7 +2791,10 @@ async function sendGemini(){
       },
       body:JSON.stringify({
         model:'llama-3.3-70b-versatile',
-        messages:_gemHistory.slice(-14)
+        messages:[
+          { role:'system', content: _ORSYS + _buildRetroContext() },
+          ..._gemHistory.slice(1).slice(-13)
+        ]
       })
     });
     const data=await res.json();
