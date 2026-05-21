@@ -138,8 +138,10 @@ body{font-family:var(--font-b);background:var(--bg-base);color:var(--text-primar
 
 /* ============ MAIN ============ */
 .main-content{grid-column:2;margin-left:var(--sidebar-w);padding:26px 28px;overflow-y:auto;min-height:calc(100vh - var(--topbar-h));background:var(--bg-base)}
+.main-content.no-scroll{overflow:hidden;height:calc(100vh - var(--topbar-h));padding-bottom:0}
 .view{display:none}
 .view.active{display:block;animation:fadeIn .2s ease}
+#view-asistente.active{display:flex}
 @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 .view-header{display:flex;align-items:center;gap:14px;margin-bottom:24px;flex-wrap:wrap}
 .view-header h1{font-family:var(--font-h);font-weight:700;font-size:22px;letter-spacing:-.03em;padding-left:12px;border-left:3px solid var(--brand-primary)}
@@ -848,15 +850,15 @@ tbody tr:hover{background:var(--bg-hover)}
 </div>
 
 <!-- ============ ASISTENTE IA ============ -->
-<div class="view" id="view-asistente">
-  <div class="view-header">
+<div class="view" id="view-asistente" style="display:none;flex-direction:column;height:calc(100vh - var(--topbar-h) - 52px)">
+  <div class="view-header" style="flex-shrink:0">
     <h1>Asistente IA</h1>
     <span class="view-sub">Coordinador académico con acceso a tus datos de retroalimentación</span>
     <button class="btn-ghost sm" onclick="clearGeminiChat()">Limpiar conversación</button>
   </div>
-  <div style="display:flex;flex-direction:column;height:calc(100vh - 140px);max-width:780px;margin:0 auto">
+  <div style="display:flex;flex-direction:column;flex:1;overflow:hidden;max-width:780px;width:100%;margin:0 auto">
     <div id="gemMsgsPage" style="flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:12px;padding:4px 2px 16px"></div>
-    <div style="display:flex;gap:10px;padding-top:12px;border-top:1px solid var(--border)">
+    <div style="flex-shrink:0;display:flex;gap:10px;padding-top:12px;border-top:1px solid var(--border)">
       <input type="text" id="gemInputPage" class="form-input" placeholder="Pregunta sobre tus mentorías, pide análisis o consejos..." style="flex:1;font-size:14px" onkeydown="if(event.key==='Enter')sendGeminiPage()"/>
       <button class="btn-primary" onclick="sendGeminiPage()" id="gemSendBtnPage" style="padding:0 20px;flex-shrink:0">Enviar</button>
     </div>
@@ -1429,6 +1431,7 @@ const PAGE_TITLES = {
 function navigate(v){
   document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));
+  document.querySelector('.main-content').classList.toggle('no-scroll', v==='asistente');
   const el = document.getElementById('view-'+v);
   if(el) el.classList.add('active');
   document.querySelectorAll(`[data-view="${v}"]`).forEach(x=>x.classList.add('active'));
