@@ -896,6 +896,21 @@ tbody tr:hover{background:var(--bg-hover)}
       </div>
     </div>
     <div class="cfg-sec cfg-full">
+      <div class="card-header"><h3>Asistente IA — Groq API Key</h3></div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="font-size:13px;color:var(--text-secondary)">La key se guarda solo en este navegador (localStorage) y nunca se sube al código. Consíguela en <strong>console.groq.com → API Keys</strong>.</div>
+        <div class="form-group">
+          <label style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em">Groq API Key</label>
+          <input type="password" id="groqKeyInput" class="form-input" placeholder="gsk_..." style="font-family:monospace;font-size:12px"/>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <button class="btn-primary" onclick="saveGroqKey()">Guardar Key</button>
+          <button class="btn-secondary" onclick="document.getElementById('groqKeyInput').type=document.getElementById('groqKeyInput').type==='password'?'text':'password'">Mostrar / Ocultar</button>
+          <span id="groqKeyStatus" style="font-size:11px;color:var(--text-muted)"></span>
+        </div>
+      </div>
+    </div>
+    <div class="cfg-sec cfg-full">
       <div class="card-header"><h3>Exportar Registro a Google Sheets</h3></div>
       <div style="font-size:13px;color:var(--text-secondary);margin-bottom:12px">Pega aquí la URL de tu Google Apps Script (Web App) para sincronizar el registro de cambios automáticamente.</div>
       <div style="display:flex;gap:10px;align-items:center">
@@ -1502,6 +1517,17 @@ async function initFirebase(){
       if(!evLoaded){ evLoaded = true; }
       renderCal(); renderDashCal();
     });
+
+    // Load Groq key from Firebase (shared across all users)
+    DB.collection('config').doc('groq').get().then(doc => {
+      if(doc.exists && doc.data().api_key){
+        localStorage.setItem('groq_api_key', doc.data().api_key);
+        const gki=document.getElementById('groqKeyInput');
+        const gks=document.getElementById('groqKeyStatus');
+        if(gki) gki.value=doc.data().api_key;
+        if(gks){ gks.textContent='✓ Key configurada (Firebase)'; gks.style.color='var(--s-green)'; }
+      }
+    }).catch(()=>{});
 
     setRT('connected');
     return true;
@@ -2584,7 +2610,7 @@ function renderSearchResults(q, containerId){
 }
 
 // ============ ASISTENTE GROQ ============
-const _ORKEY = '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';
+function _getGroqKey(){ return localStorage.getItem('groq_api_key') || ''; }
 const _ORURL = 'https://api.groq.com/openai/v1/chat/completions';
 const _ORSYS = `Eres un asistente experto del Club Sinergético. Ayudas al equipo de coordinación con consultas de información textual, ideas para temas de mentoría, redacción de copys para WhatsApp y Telegram, preguntas para enganchar a la audiencia, estrategias de contenido y difusión, y análisis de retroalimentación. Responde siempre en español mexicano, de forma clara, concisa y práctica. Los tipos de mentoría del club son: Lunes de Principiante (12pm), Lunes Sinergético (7pm), Martes de Estrategia Digital (7pm), Miércoles de Creación de Contenido (7pm), Jueves de Estrategia de Venta (7pm), Viernes de Caso de Éxito (4pm).`;
 
@@ -2723,12 +2749,14 @@ async function sendGemini(){
   msgs.innerHTML+=`<div class="gem-msg ai typing" id="${typingId}">Escribiendo...</div>`;
   msgs.scrollTop=msgs.scrollHeight;
 
+  const _key=_getGroqKey();
+  if(!_key){ document.getElementById(typingId).remove(); msgs.innerHTML+=`<div class="gem-msg ai">⚠️ Configura la API Key de Groq en Configuración → Asistente IA.</div>`; msgs.scrollTop=msgs.scrollHeight; btn.disabled=false; return; }
   try{
     const res=await fetch(_ORURL,{
       method:'POST',
       headers:{
         'Content-Type':'application/json',
-        'Authorization':'Bearer '+_ORKEY
+        'Authorization':'Bearer '+_key
       },
       body:JSON.stringify({
         model:'llama-3.3-70b-versatile',
@@ -2776,6 +2804,28 @@ function toast(msg,type='info'){
   const t=document.createElement('div');
   t.className='toast '+type; t.textContent=msg;
   c.appendChild(t); setTimeout(()=>t.remove(),3000);
+}
+
+function saveGroqKey(){
+  const k=document.getElementById('groqKeyInput').value.trim();
+  if(!k.startsWith('gsk_')){ toast('La key debe comenzar con gsk_','error'); return; }
+  localStorage.setItem('groq_api_key',k);
+  const gks=document.getElementById('groqKeyStatus');
+  if(DB){
+    DB.collection('config').doc('groq').set({ api_key: k }).then(()=>{
+      gks.textContent='✓ Guardada en Firebase (todos la recibirán)';
+      gks.style.color='var(--s-green)';
+      toast('API Key guardada y compartida con todos ✓','success');
+    }).catch(()=>{
+      gks.textContent='✓ Guardada localmente (Firebase no disponible)';
+      gks.style.color='var(--s-yellow)';
+      toast('Guardada localmente — Firebase no disponible','warning');
+    });
+  } else {
+    gks.textContent='✓ Guardada localmente';
+    gks.style.color='var(--s-green)';
+    toast('API Key guardada correctamente','success');
+  }
 }
 
 // ============ FILTERS ============
@@ -3093,6 +3143,9 @@ function loadConfig(){
   const au = getApiUrl();
   const ael=document.getElementById('cfg-api-url');if(ael) ael.value=au;
   updateApiStatus(au);
+  const gk=localStorage.getItem('groq_api_key')||'';
+  const gki=document.getElementById('groqKeyInput');
+  if(gki){ gki.value=gk; if(gk){ document.getElementById('groqKeyStatus').textContent='✓ Key configurada'; document.getElementById('groqKeyStatus').style.color='var(--s-green)'; } }
 }
 
 // ================================================================
