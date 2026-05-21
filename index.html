@@ -3342,7 +3342,14 @@ function giDate(raw){
   return null;
 }
 function giISO(raw){const d=giDate(raw);if(!d)return null;return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
-function giDisp(raw){return(raw||'').trim().replace(/\s+\d{1,2}\s*(am|pm)/gi,'').trim();}
+function giDisp(raw){return(raw||'').trim().replace(/\s*\d{1,2}\s*(am|pm)(\s*\/\s*\d{1,2}\s*(am|pm))?/gi,'').trim();}
+function giHorario(raw){
+  const m=(raw||'').match(/(\d{1,2}\s*(?:am|pm))(?:\s*\/\s*(\d{1,2}\s*(?:am|pm)))?/i);
+  if(!m)return'';
+  const a=m[1].trim().toUpperCase().replace(/([APM]+)/,'$1').replace(/(\d+)\s*/,'$1 ');
+  const b=m[2]?m[2].trim().toUpperCase().replace(/(\d+)\s*/,'$1 '):'';
+  return b?`${a} – ${b}`:a;
+}
 function esURL(v){return/https?:\/\//i.test(v||'');}
 function esBasura(v){const s=(v||'').trim();return!s||s==='000'||s===','||/^\d+$/.test(s)||esURL(s);}
 
@@ -3374,9 +3381,9 @@ async function loadGiras(force=false){
     const dir=(r[3]||'').trim(),hotel=(r[4]||'').trim();
     if(!a)continue;
     const esEsp=/BOOTCAMP|SYNERGY/i.test(a)&&a.length<70;
-    if(esEsp){_girasRaw.push({tipo:'especial',nombre:a,fecha_raw:b,fecha_display:giDisp(b),fecha_iso:giISO(b),fechaDate:giDate(b),hotel:esBasura(hotel)?'':hotel.substring(0,80),dir:esBasura(dir)?'':dir.substring(0,80)});continue;}
+    if(esEsp){_girasRaw.push({tipo:'especial',nombre:a,fecha_raw:b,fecha_display:giDisp(b),horario:giHorario(b),fecha_iso:giISO(b),fechaDate:giDate(b),hotel:esBasura(hotel)?'':hotel.substring(0,80),dir:esBasura(dir)?'':dir.substring(0,80)});continue;}
     const esCd=/^#?\d+\s+[A-ZÁÉÍÓÚ]/i.test(a)&&a.length<50&&b&&!esURL(a);
-    if(esCd){_girasRaw.push({tipo:'evento',nombre:a,fecha_raw:b,fecha_display:giDisp(b),fecha_iso:giISO(b),fechaDate:giDate(b),hotel:esBasura(hotel)?'':hotel.substring(0,100),dir:esBasura(dir)?'':dir.substring(0,120)});}
+    if(esCd){_girasRaw.push({tipo:'evento',nombre:a,fecha_raw:b,fecha_display:giDisp(b),horario:giHorario(b),fecha_iso:giISO(b),fechaDate:giDate(b),hotel:esBasura(hotel)?'':hotel.substring(0,100),dir:esBasura(dir)?'':dir.substring(0,120)});}
   }
 
   const ts=Date.now();
@@ -3401,7 +3408,7 @@ function renderGiras(){
   if(destacEl){
     if(esp.length){
       destacEl.innerHTML=`<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--text-muted);margin-bottom:9px">Eventos principales</div><div class="destac-grid">`+
-      esp.map(g=>{const isPast=g.fechaDate&&new Date(g.fechaDate)<today;return`<div class="destac-card ${isPast?'pasada':''}" style="background:${giraColor(g.nombre)}"><div class="destac-nombre">${h(g.nombre)}</div><div class="destac-info">${g.fecha_display?`<span>📅 ${h(g.fecha_display)}</span>`:''}${g.hotel?`<span>🏨 ${h(g.hotel)}</span>`:''}${g.dir?`<span>📍 ${h(g.dir)}</span>`:''}</div></div>`;}).join('')+'</div>';
+      esp.map(g=>{const isPast=g.fechaDate&&new Date(g.fechaDate)<today;return`<div class="destac-card ${isPast?'pasada':''}" style="background:${giraColor(g.nombre)}"><div class="destac-nombre">${h(g.nombre)}</div><div class="destac-info">${g.fecha_display?`<span>📅 ${h(g.fecha_display)}</span>`:''}${g.horario?`<span>🕐 ${h(g.horario)}</span>`:''}${g.hotel?`<span>🏨 ${h(g.hotel)}</span>`:''}${g.dir?`<span>📍 ${h(g.dir)}</span>`:''}</div></div>`;}).join('')+'</div>';
     }else{destacEl.innerHTML='';}
   }
   // Eventos ciudad
@@ -3415,7 +3422,7 @@ function renderGiras(){
   listEl.innerHTML=Object.entries(grupos).map(([mes,items])=>{
     const todosP=items.every(g=>g.fechaDate&&new Date(g.fechaDate)<today);
     return`<div class="giras-group"><div class="gira-mes-hdr">${mes.charAt(0).toUpperCase()+mes.slice(1)}<small>· ${items.length} parada${items.length!==1?'s':''}</small>${todosP?`<span style="margin-left:auto;font-size:10px;background:rgba(107,114,128,.1);color:var(--text-muted);padding:2px 8px;border-radius:20px">Pasado</span>`:`<span style="margin-left:auto;font-size:10px;background:rgba(16,185,129,.1);color:#10B981;padding:2px 8px;border-radius:20px;font-weight:700">Próximo</span>`}</div>
-    ${items.map(g=>{const isPast=g.fechaDate&&new Date(g.fechaDate)<today;return`<div class="gira-card ${isPast?'pasada':''}" style="--gc:${isPast?'var(--text-muted)':'var(--brand-primary)'}"><div><div class="gira-nombre">${h(g.nombre)}</div><div class="gira-meta">${g.fecha_display?`<span>📅 ${h(g.fecha_display)}</span>`:''}${g.hotel?`<span>🏨 ${h(g.hotel)}</span>`:''}${g.dir?`<span>📍 ${h(g.dir)}</span>`:''}</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0">${g.fechaDate?`<div class="gira-pill ${isPast?'pasada':''}">${g.fechaDate.toLocaleDateString('es-MX',{day:'numeric',month:'short'})}</div>`:''}${g.fecha_iso&&!isPast?`<button class="gira-agenda-btn" onclick="giVerEnCal('${g.fecha_iso}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Ver en agenda</button>`:''}</div></div>`;}).join('')}</div>`;
+    ${items.map(g=>{const isPast=g.fechaDate&&new Date(g.fechaDate)<today;return`<div class="gira-card ${isPast?'pasada':''}" style="--gc:${isPast?'var(--text-muted)':'var(--brand-primary)'}"><div><div class="gira-nombre">${h(g.nombre)}</div><div class="gira-meta">${g.fecha_display?`<span>📅 ${h(g.fecha_display)}</span>`:''}${g.horario?`<span>🕐 ${h(g.horario)}</span>`:''}${g.hotel?`<span>🏨 ${h(g.hotel)}</span>`:''}${g.dir?`<span>📍 ${h(g.dir)}</span>`:''}</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0">${g.fechaDate?`<div class="gira-pill ${isPast?'pasada':''}">${g.fechaDate.toLocaleDateString('es-MX',{day:'numeric',month:'short'})}</div>`:''}${g.fecha_iso&&!isPast?`<button class="gira-agenda-btn" onclick="giVerEnCal('${g.fecha_iso}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Ver en agenda</button>`:''}</div></div>`;}).join('')}</div>`;
   }).join('');
 }
 
