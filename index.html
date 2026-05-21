@@ -590,6 +590,10 @@ tbody tr:hover{background:var(--bg-hover)}
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="5" height="18" rx="1"/><rect x="10" y="3" width="5" height="12" rx="1"/><rect x="17" y="3" width="5" height="15" rx="1"/></svg>
       Flujo Kanban
     </button>
+    <button class="nav-item" data-view="asistente">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 0 1 10 10c0 5.52-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2z"/><path d="M8 12h.01M12 12h.01M16 12h.01"/></svg>
+      Asistente IA
+    </button>
     <span class="nav-section">Gestión</span>
     <button class="nav-item" data-view="mentores">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
@@ -840,6 +844,22 @@ tbody tr:hover{background:var(--bg-hover)}
     <div class="k-col"><div class="k-col-hdr"><span class="k-dot" style="background:#F59E0B"></span><h3>Creada</h3><span class="k-count" id="kc-creada">0</span></div><div class="k-cards" id="k-creada"></div></div>
     <div class="k-col"><div class="k-col-hdr"><span class="k-dot" style="background:#3B82F6"></span><h3>Confirmada</h3><span class="k-count" id="kc-confirmada">0</span></div><div class="k-cards" id="k-confirmada"></div></div>
     <div class="k-col"><div class="k-col-hdr"><span class="k-dot" style="background:#10B981"></span><h3>Concluida</h3><span class="k-count" id="kc-concluida">0</span></div><div class="k-cards" id="k-concluida"></div></div>
+  </div>
+</div>
+
+<!-- ============ ASISTENTE IA ============ -->
+<div class="view" id="view-asistente">
+  <div class="view-header">
+    <h1>Asistente IA</h1>
+    <span class="view-sub">Coordinador académico con acceso a tus datos de retroalimentación</span>
+    <button class="btn-ghost sm" onclick="clearGeminiChat()">Limpiar conversación</button>
+  </div>
+  <div style="display:flex;flex-direction:column;height:calc(100vh - 140px);max-width:780px;margin:0 auto">
+    <div id="gemMsgsPage" style="flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:12px;padding:4px 2px 16px"></div>
+    <div style="display:flex;gap:10px;padding-top:12px;border-top:1px solid var(--border)">
+      <input type="text" id="gemInputPage" class="form-input" placeholder="Pregunta sobre tus mentorías, pide análisis o consejos..." style="flex:1;font-size:14px" onkeydown="if(event.key==='Enter')sendGeminiPage()"/>
+      <button class="btn-primary" onclick="sendGeminiPage()" id="gemSendBtnPage" style="padding:0 20px;flex-shrink:0">Enviar</button>
+    </div>
   </div>
 </div>
 
@@ -1402,7 +1422,7 @@ function setTheme(t){
 const PAGE_TITLES = {
   dashboard:'Coordinación Académica', calendario:'Calendario',
   creacion:'Creación de Mentoría', difusion:'Difusión de Avisos',
-  retro:'Retroalimentación', kanban:'Flujo Kanban',
+  retro:'Retroalimentación', kanban:'Flujo Kanban', asistente:'Asistente IA',
   mentores:'Mentores', config:'Configuración',
   giras:'Eventos / Giras', grupos:'Grupos de Comunidad'
 };
@@ -1420,6 +1440,7 @@ function navigate(v){
   if(v==='difusion') renderDif();
   if(v==='retro') renderRetro();
   if(v==='kanban') renderKanban();
+  if(v==='asistente') initAsistenteView();
   if(v==='giras') setTimeout(loadGiras,0);
   if(v==='grupos') setTimeout(loadGrupos,0);
 }
@@ -2756,13 +2777,56 @@ document.addEventListener('DOMContentLoaded',()=>{
   }
 });
 
-function toggleGemini(){
-  const p=document.getElementById('geminiPanel');
-  p.classList.toggle('open');
-  if(p.classList.contains('open')) document.getElementById('gemInput').focus();
+const _gemHistory=[{ role:'system', content:_ORSYS }];
+let _asistenteInitialized = false;
+
+function initAsistenteView(){
+  if(_asistenteInitialized) return;
+  _asistenteInitialized = true;
+  const msgs = document.getElementById('gemMsgsPage');
+  msgs.innerHTML = `<div class="gem-msg ai" style="max-width:100%">¡Hola! Soy tu coordinador académico IA del Club Sinergético.<br><br>Tengo acceso a los datos reales de tus mentorías pasadas. Puedo ayudarte a:<br><br>📊 <strong>Analizar tendencias</strong> de audiencia y retención<br>💡 <strong>Identificar qué temas</strong> generaron más impacto<br>🎯 <strong>Dar consejos específicos</strong> por tipo de mentoría o mentor<br>✍️ <strong>Generar ideas y copys</strong> para próximas sesiones<br><br>¿Qué quieres analizar o mejorar hoy?</div>`;
+  document.getElementById('gemInputPage').focus();
 }
 
-const _gemHistory=[{ role:'system', content:_ORSYS }];
+function clearGeminiChat(){
+  _gemHistory.length = 0;
+  _gemHistory.push({ role:'system', content:_ORSYS });
+  _asistenteInitialized = false;
+  initAsistenteView();
+}
+
+async function sendGeminiPage(){
+  const inp=document.getElementById('gemInputPage');
+  const btn=document.getElementById('gemSendBtnPage');
+  const msg=inp.value.trim();
+  if(!msg) return;
+  inp.value=''; btn.disabled=true;
+  const msgs=document.getElementById('gemMsgsPage');
+  _gemHistory.push({ role:'user', content:msg });
+  msgs.innerHTML+=`<div class="gem-msg user" style="align-self:flex-end;max-width:75%">${h(msg)}</div>`;
+  const typingId='gem-t-'+Date.now();
+  msgs.innerHTML+=`<div class="gem-msg ai typing" id="${typingId}" style="max-width:100%">Analizando...</div>`;
+  msgs.scrollTop=msgs.scrollHeight;
+  const _key=_getGroqKey();
+  if(!_key){ document.getElementById(typingId).remove(); msgs.innerHTML+=`<div class="gem-msg ai" style="max-width:100%">⚠️ Configura la API Key de Groq en <strong>Configuración → Asistente IA</strong>.</div>`; msgs.scrollTop=msgs.scrollHeight; btn.disabled=false; return; }
+  try{
+    const res=await fetch(_ORURL,{ method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer '+_key},
+      body:JSON.stringify({ model:'llama-3.3-70b-versatile', messages:[{ role:'system', content:_ORSYS+_buildRetroContext() },..._gemHistory.slice(1).slice(-13)] })
+    });
+    const data=await res.json();
+    if(!res.ok) throw new Error(data?.error?.message||`HTTP ${res.status}`);
+    const text=data?.choices?.[0]?.message?.content||'Sin respuesta. Intenta de nuevo.';
+    _gemHistory.push({ role:'assistant', content:text });
+    const el=document.getElementById(typingId);
+    if(el){ el.classList.remove('typing'); el.innerHTML=text.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>'); }
+  } catch(e){
+    const el=document.getElementById(typingId);
+    if(el){ el.classList.remove('typing'); el.innerHTML=`Error: ${e.message}`; }
+  }
+  msgs.scrollTop=msgs.scrollHeight;
+  btn.disabled=false;
+  document.getElementById('gemInputPage').focus();
+}
 
 async function sendGemini(){
   const inp=document.getElementById('gemInput');
@@ -3444,8 +3508,5 @@ setInterval(()=>{localStorage.removeItem('cs_grupos_ts');const a=document.queryS
 
 <!-- FLOATING ELEMENTS - at end of body for correct fixed positioning -->
 <div id="toastC" class="toast-c"></div>
-<div id="geminiBubble2" onclick="toggleGemini()" title="Asistente" style="position:fixed;bottom:80px;right:16px;z-index:9998;cursor:pointer;width:52px;height:52px;background:linear-gradient(135deg,#9B2335,#6D1A26);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(155,35,53,0.5);transition:transform .15s">
-  <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" width="22" height="22"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-</div>
 </body>
 </html>
