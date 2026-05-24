@@ -138,10 +138,10 @@ body{font-family:var(--font-b);background:var(--bg-base);color:var(--text-primar
 
 /* ============ MAIN ============ */
 .main-content{grid-column:2;margin-left:var(--sidebar-w);padding:26px 28px;overflow-y:auto;min-height:calc(100vh - var(--topbar-h));background:var(--bg-base)}
-.main-content.no-scroll{overflow:hidden;height:calc(100vh - var(--topbar-h));padding-bottom:0}
+.main-content.no-scroll{overflow:hidden;display:flex;flex-direction:column;height:calc(100vh - var(--topbar-h));padding:0}
 .view{display:none}
 .view.active{display:block;animation:fadeIn .2s ease}
-#view-asistente.active{display:flex}
+#view-asistente.active{display:flex;flex:1;min-height:0;padding:20px 28px 0;flex-direction:column}
 @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 .view-header{display:flex;align-items:center;gap:14px;margin-bottom:24px;flex-wrap:wrap}
 .view-header h1{font-family:var(--font-h);font-weight:700;font-size:22px;letter-spacing:-.03em;padding-left:12px;border-left:3px solid var(--brand-primary)}
@@ -850,7 +850,7 @@ tbody tr:hover{background:var(--bg-hover)}
 </div>
 
 <!-- ============ ASISTENTE IA ============ -->
-<div class="view" id="view-asistente" style="flex-direction:column;height:calc(100vh - var(--topbar-h) - 52px)">
+<div class="view" id="view-asistente">
   <div class="view-header" style="flex-shrink:0">
     <h1>Asistente IA</h1>
     <span class="view-sub">Coordinador académico con acceso a tus datos de retroalimentación</span>
@@ -1350,8 +1350,13 @@ tbody tr:hover{background:var(--bg-hover)}
 <style>
 @media(max-width:600px){
   #mobileNav{display:grid !important}
-  #geminiBubble{position:fixed;bottom:max(76px,calc(env(safe-area-inset-bottom,0px)+70px));right:16px;z-index:500}
-  #geminiPanel{position:fixed;bottom:max(140px,calc(env(safe-area-inset-bottom,0px)+130px));right:12px;left:12px;width:auto;z-index:500}
+  .main-content.no-scroll{height:calc(100dvh - var(--topbar-h));padding-bottom:0}
+  #view-asistente.active{padding:12px 12px 0}
+  #view-asistente .view-header{margin-bottom:10px}
+  #view-asistente .view-header h1{font-size:17px}
+  #view-asistente .view-sub{font-size:11px}
+  /* Input row stays above mobile nav */
+  #view-asistente > div > div:last-child{padding-bottom:max(70px, calc(env(safe-area-inset-bottom,0px) + 64px))}
 }
 .mob-nav-btn{background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 0;color:var(--text-muted);font-family:var(--font-b);font-size:9.5px;font-weight:500;transition:color var(--t);width:100%}
 .mob-nav-btn:active{opacity:.7}
