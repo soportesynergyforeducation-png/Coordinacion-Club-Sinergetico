@@ -3345,7 +3345,7 @@ function giDate(raw){
   m=raw.match(/(\d{1,2})\s+de\s+([A-Za-záéíóú]{3,})/i);
   if(m){const ms=_MES[m[2].toLowerCase().substring(0,3)];if(ms!==undefined){const now=new Date();let d=new Date(now.getFullYear(),ms,+m[1]);const diff=(d-now)/(1000*60*60*24);if(diff>=-60&&diff<=120)return d;}}
   m=raw.match(/\b(\d{1,2})\s+([A-Za-záéíóú]{3,})/i);
-  if(m){const ms=_MES[m[2].toLowerCase().substring(0,3)];if(ms!==undefined){const now=new Date();let d=new Date(now.getFullYear(),ms,+m[1]);if(d<new Date(now.getFullYear(),now.getMonth()-1,1))d.setFullYear(now.getFullYear()+1);return d;}}
+  if(m){const ms=_MES[m[2].toLowerCase().substring(0,3)];if(ms!==undefined)return new Date(new Date().getFullYear(),ms,+m[1]);}
   m=raw.match(/(\d{4})-(\d{2})-(\d{2})/);if(m)return new Date(+m[1],+m[2]-1,+m[3]);
   return null;
 }
