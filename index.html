@@ -3400,6 +3400,7 @@ async function loadGiras(force=false){
 
   const ts=Date.now();
   localStorage.setItem(CK,JSON.stringify(_girasRaw));localStorage.setItem(CT,String(ts));
+  toast(`DEBUG: ${rows.length} filas del Sheets, ${_girasRaw.length} eventos cargados (inicio fila ${GIRAS_START_ROW+1})`,'info');
   renderGiras();_giSyncCal();setLastUpd('girasLastUpdate',ts);_giUpdateBadge();
 }
 
