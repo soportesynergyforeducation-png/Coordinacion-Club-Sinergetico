@@ -3394,7 +3394,7 @@ async function loadGiras(force=false){
     if(!a)continue;
     const esEsp=/BOOTCAMP|SYNERGY/i.test(a)&&a.length<70;
     if(esEsp){_girasRaw.push({tipo:'especial',nombre:a,fecha_raw:b,fecha_display:giDisp(b),horario:giHorario(b),fecha_iso:giISO(b),fechaDate:giDate(b),hotel:esBasura(hotel)?'':hotel.substring(0,80),dir:esBasura(dir)?'':dir.substring(0,80)});continue;}
-    const esCd=/^#?\d+\s+[A-ZÁÉÍÓÚ]/i.test(a)&&a.length<50&&b&&!esURL(a);
+    const esCd=(/^#?\d+\s+[A-ZÁÉÍÓÚ]/i.test(a)||/^[A-ZÁÉÍÓÚÑ]{2,}/i.test(a))&&a.length<60&&b&&!esURL(a)&&!esEsp;
     if(esCd){_girasRaw.push({tipo:'evento',nombre:a,fecha_raw:b,fecha_display:giDisp(b),horario:giHorario(b),fecha_iso:giISO(b),fechaDate:giDate(b),hotel:esBasura(hotel)?'':hotel.substring(0,100),dir:esBasura(dir)?'':dir.substring(0,120)});}
   }
 
