@@ -3386,7 +3386,8 @@ async function loadGiras(force=false){
   }
 
   _girasRaw=[];
-  for(let i=0;i<rows.length;i++){
+  const GIRAS_START_ROW = 55; // fila 56 del Sheets (header=fila1, datos desde fila2, índice 0-based)
+  for(let i=GIRAS_START_ROW;i<rows.length;i++){
     const r=rows[i];
     const a=(r[0]||'').trim(),b=(r[1]||'').trim();
     const dir=(r[3]||'').trim(),hotel=(r[4]||'').trim();
