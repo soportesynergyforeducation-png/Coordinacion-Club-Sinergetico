@@ -3339,13 +3339,13 @@ const _MES={ene:0,feb:1,mar:2,abr:3,may:4,jun:5,jul:6,ago:7,sep:8,oct:9,nov:10,d
 function giDate(raw){
   if(!raw) return null;
   let m;
-  const _mk=(day,monStr,yr)=>{const ms=_MES[monStr.toLowerCase().substring(0,3)];if(ms===undefined)return null;const now=new Date();let d=new Date(yr||now.getFullYear(),ms,+day);if(!yr&&d<new Date(now.getFullYear(),now.getMonth()-1,1))d.setFullYear(now.getFullYear()+1);return d;};
-  // "27 mayo 2026" or "27 mayo"
-  m=raw.match(/(\d{1,2})\s+(?:de\s+)?([A-Za-záéíóú]{3,})\s+(\d{4})/i);
-  if(m){const r=_mk(m[1],m[2],+m[3]);if(r)return r;}
-  // "27 DE MAYO" or "27 mayo" (no year)
-  m=raw.match(/(\d{1,2})\s+(?:de\s+)?([A-Za-záéíóú]{3,})/i);
-  if(m){const r=_mk(m[1],m[2],null);if(r)return r;}
+  m=raw.match(/(\d+)[,\s\d]*\s+([A-Za-záéíóú]{3,})\s+(\d{4})/i);
+  if(m){const ms=_MES[m[2].toLowerCase().substring(0,3)];if(ms!==undefined)return new Date(+m[3],ms,+m[1]);}
+  // "27 DE MAYO" — solo si el mes cae dentro de ±3 meses desde hoy (evita mezclar años)
+  m=raw.match(/(\d{1,2})\s+de\s+([A-Za-záéíóú]{3,})/i);
+  if(m){const ms=_MES[m[2].toLowerCase().substring(0,3)];if(ms!==undefined){const now=new Date();let d=new Date(now.getFullYear(),ms,+m[1]);const diff=(d-now)/(1000*60*60*24);if(diff>=-60&&diff<=120)return d;}}
+  m=raw.match(/\b(\d{1,2})\s+([A-Za-záéíóú]{3,})/i);
+  if(m){const ms=_MES[m[2].toLowerCase().substring(0,3)];if(ms!==undefined){const now=new Date();let d=new Date(now.getFullYear(),ms,+m[1]);if(d<new Date(now.getFullYear(),now.getMonth()-1,1))d.setFullYear(now.getFullYear()+1);return d;}}
   m=raw.match(/(\d{4})-(\d{2})-(\d{2})/);if(m)return new Date(+m[1],+m[2]-1,+m[3]);
   return null;
 }
