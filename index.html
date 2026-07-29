@@ -3124,7 +3124,8 @@ document.addEventListener('DOMContentLoaded',()=>{
 
 
   // Show local notification when data changes (visible to user)
-  function sendLocalNotif(title, body){
+  // Exposed on window: called from initFirebase's onSnapshot callback, a different closure.
+  window.sendLocalNotif = function sendLocalNotif(title, body){
     // Local notification fallback (browser must be open)
     if(document.visibilityState === 'hidden' && Notification.permission === 'granted'){
       new Notification(title, { body, icon: 'icon-192.png', tag: 'cs-update', renotify: true });
@@ -3367,12 +3368,15 @@ function giHorario(raw){
 function esURL(v){return/https?:\/\//i.test(v||'');}
 function esBasura(v){const s=(v||'').trim();return!s||s==='000'||s===','||/^\d+$/.test(s)||esURL(s);}
 
+function _giReviveDates(arr){
+  return arr.map(g=>({...g, fechaDate: g.fechaDate ? new Date(g.fechaDate) : null}));
+}
 async function loadGiras(force=false){
   const CK='cs_giras',CT='cs_giras_ts';
   const noApiEl=document.getElementById('girasNoApi');
   if(noApiEl) noApiEl.style.display='none';
 
-  if(!force){const c=localStorage.getItem(CK);const t=+localStorage.getItem(CT)||0;if(c&&Date.now()-t<SHEET_TTL){_girasRaw=JSON.parse(c);renderGiras();_giSyncCal();setLastUpd('girasLastUpdate',t);_giUpdateBadge();return;}}
+  if(!force){const c=localStorage.getItem(CK);const t=+localStorage.getItem(CT)||0;if(c&&Date.now()-t<SHEET_TTL){_girasRaw=_giReviveDates(JSON.parse(c));renderGiras();_giSyncCal();setLastUpd('girasLastUpdate',t);_giUpdateBadge();return;}}
   const sEl=document.getElementById('girasStatus');const eEl=document.getElementById('girasError');
   if(sEl)sEl.style.display='block';if(eEl)eEl.style.display='none';
   document.getElementById('girasDestacados').innerHTML='';
@@ -3383,7 +3387,7 @@ async function loadGiras(force=false){
 
   if(!rows){
     const c=localStorage.getItem(CK);
-    if(c){_girasRaw=JSON.parse(c);renderGiras();_giSyncCal();setLastUpd('girasLastUpdate',+localStorage.getItem(CT)||0);}
+    if(c){_girasRaw=_giReviveDates(JSON.parse(c));renderGiras();_giSyncCal();setLastUpd('girasLastUpdate',+localStorage.getItem(CT)||0);}
     if(eEl){eEl.style.display='block';eEl.textContent='Error al cargar. Verifica que el Apps Script esté publicado como público.';}
     return;
   }
