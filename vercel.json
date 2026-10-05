@@ -1,0 +1,28 @@
+{
+  "rewrites": [
+    {
+      "source": "/",
+      "missing": [{ "type": "cookie", "key": "cs_auth", "value": "cs_7f3a9c1e5b2d48a6b0e4d9c2a1f86e37" }],
+      "destination": "/login.html"
+    },
+    {
+      "source": "/index.html",
+      "missing": [{ "type": "cookie", "key": "cs_auth", "value": "cs_7f3a9c1e5b2d48a6b0e4d9c2a1f86e37" }],
+      "destination": "/login.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/login.html",
+      "headers": [{ "key": "Cache-Control", "value": "no-store" }]
+    },
+    {
+      "source": "/",
+      "headers": [{ "key": "Cache-Control", "value": "private, no-store" }]
+    },
+    {
+      "source": "/index.html",
+      "headers": [{ "key": "Cache-Control", "value": "private, no-store" }]
+    }
+  ]
+}

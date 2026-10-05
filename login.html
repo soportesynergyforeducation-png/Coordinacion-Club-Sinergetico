@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>Acceso — Club Sinergético</title>
+<meta name="robots" content="noindex"/>
+<meta name="theme-color" content="#9B2335"/>
+<link rel="icon" type="image/png" href="icon-192.png"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{min-height:100vh;min-height:100dvh;display:grid;place-items:center;padding:20px;font-family:'Source Sans 3',system-ui,sans-serif;color:#fff;
+  background:radial-gradient(800px 500px at 50% -10%,#9B2335 0%,transparent 60%),#141414}
+.box{width:100%;max-width:380px;background:#1d1d1d;border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:34px 28px;box-shadow:0 30px 70px -20px rgba(0,0,0,.7);text-align:center}
+.box img{width:64px;height:64px;border-radius:16px;margin-bottom:18px}
+h1{font-family:'Playfair Display',serif;font-size:24px;margin-bottom:6px}
+p{color:rgba(255,255,255,.6);font-size:15px;margin-bottom:22px}
+input{width:100%;padding:14px 16px;border-radius:12px;border:1px solid rgba(255,255,255,.18);background:#111;color:#fff;font-size:17px;text-align:center;letter-spacing:.15em;outline:none;transition:border-color .2s}
+input:focus{border-color:#C0392B}
+button{width:100%;margin-top:14px;padding:14px;border:0;border-radius:12px;background:#9B2335;color:#fff;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;transition:filter .2s,transform .1s}
+button:hover{filter:brightness(1.15)}button:active{transform:scale(.98)}button:disabled{opacity:.6;cursor:wait}
+.err{min-height:20px;margin-top:12px;color:#ff8a8a;font-size:14px}
+</style>
+</head>
+<body>
+<form class="box" id="f" autocomplete="off">
+  <img src="icon-192.png" alt=""/>
+  <h1>Coordinación Académica</h1>
+  <p>Ingresa la contraseña para continuar</p>
+  <input type="password" id="pw" placeholder="Contraseña" inputmode="numeric" autofocus required/>
+  <button type="submit" id="b">Entrar</button>
+  <div class="err" id="e" role="alert"></div>
+</form>
+<script>
+document.getElementById('f').addEventListener('submit',function(ev){
+  ev.preventDefault();
+  var e=document.getElementById('e'),pw=document.getElementById('pw');
+  // Contraseña y token: si cambias el token, cámbialo también en vercel.json
+  var PASSWORD='1234567891',TOKEN='cs_7f3a9c1e5b2d48a6b0e4d9c2a1f86e37';
+  if(pw.value!==PASSWORD){e.textContent='Contraseña incorrecta';pw.select();return}
+  document.cookie='cs_auth='+TOKEN+'; Path=/; Max-Age=2592000; Secure; SameSite=Lax';
+  location.replace('/');
+});
+</script>
+</body>
+</html>
