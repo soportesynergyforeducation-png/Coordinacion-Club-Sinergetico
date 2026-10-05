@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Logo con IA — Modo Analista</title>
+<meta name="description" content="Prompts para crear y animar tu logo con IA. Copia y pega."/>
+<meta name="theme-color" content="#050807"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Rajdhani:wght@600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#050807; --bg2:#0a0f0d; --card:#0b100e; --line:rgba(255,255,255,.09);
+  --txt:#f2f5f4; --mut:#9aa6a1; --green:#1fe58a; --green2:#7dffc4;
+  --purple:#9b6bff; --blue:#35a8ff; --amber:#ffb23e;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--txt);font-family:'Inter',system-ui,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;z-index:-1;
+  background:
+   radial-gradient(900px 500px at 85% -10%,rgba(31,229,138,.16),transparent 60%),
+   radial-gradient(700px 500px at -10% 40%,rgba(31,229,138,.07),transparent 60%),
+   radial-gradient(800px 600px at 60% 110%,rgba(155,107,255,.08),transparent 60%)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+
+.brand{font-family:'Rajdhani',sans-serif;font-weight:700;letter-spacing:.04em;font-size:22px;text-transform:uppercase;display:inline-flex;gap:8px;align-items:center}
+.brand::before,.brand::after{content:"";width:8px;height:26px;border:2px solid var(--green);border-right:0}
+.brand::after{border:2px solid var(--green);border-left:0}
+.brand b{color:var(--green)}
+.brand span{color:#dfe5e2}
+nav{padding:26px 0;display:flex;justify-content:space-between;align-items:center}
+nav a.link{color:var(--mut);text-decoration:none;font-size:14px;font-weight:500}
+nav a.link:hover{color:var(--green)}
+
+.hero{padding:48px 0 56px}
+.hero h1{font-weight:900;font-size:clamp(40px,8vw,88px);line-height:.98;letter-spacing:-.025em;text-transform:uppercase}
+.hero h1 .g{background:linear-gradient(180deg,#7dffc4,#1fe58a 60%,#0fa863);-webkit-background-clip:text;background-clip:text;color:transparent;display:block}
+.hero p{margin-top:22px;color:var(--mut);font-size:clamp(16px,2.2vw,20px);max-width:560px}
+.steps{margin-top:34px;display:flex;gap:14px;flex-wrap:wrap}
+.step{display:flex;align-items:center;gap:10px;padding:10px 16px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.03);font-size:14px;font-weight:600}
+.step i{font-style:normal;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:800;color:#04130b;background:var(--green)}
+.step.s2 i{background:var(--purple);color:#fff}
+.arrow{color:var(--green);align-self:center}
+
+.pcard{position:relative;margin:0 0 36px;border-radius:26px;padding:1px;
+  background:linear-gradient(160deg,var(--c1),rgba(255,255,255,.05) 40%,rgba(255,255,255,.03) 60%,var(--c1))}
+.pcard.a{--c1:rgba(31,229,138,.7);--ac:var(--green)}
+.pcard.b{--c1:rgba(155,107,255,.75);--ac:var(--purple)}
+.pin{background:linear-gradient(180deg,#0c1210,#060908);border-radius:25px;overflow:hidden;box-shadow:0 30px 80px -30px var(--c1)}
+.phead{padding:26px 26px 18px;display:flex;gap:18px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}
+.ptitle{display:flex;gap:16px;align-items:flex-start;flex:1;min-width:260px}
+.num{flex:none;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-weight:900;font-size:20px;color:#04130b;background:var(--ac);box-shadow:0 0 28px -2px var(--ac)}
+.pcard.b .num{color:#fff}
+.ptitle h2{font-size:clamp(22px,3.6vw,32px);font-weight:900;text-transform:uppercase;letter-spacing:-.01em;line-height:1.1}
+.ptitle p{color:var(--mut);margin-top:6px;font-size:15px}
+.tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.tag{font-size:12px;font-weight:600;padding:5px 12px;border-radius:999px;border:1px solid var(--line);color:#cdd6d2;background:rgba(255,255,255,.03)}
+
+.btn{cursor:pointer;border:0;font-family:inherit;display:inline-flex;align-items:center;gap:9px;padding:13px 22px;border-radius:14px;font-weight:800;font-size:15px;color:#04130b;background:var(--ac);transition:transform .15s,box-shadow .2s,filter .2s;box-shadow:0 8px 30px -8px var(--ac)}
+.pcard.b .btn{color:#fff}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.08)}
+.btn:active{transform:translateY(0) scale(.98)}
+.btn svg{width:18px;height:18px}
+.btn.ok{background:#fff;color:#04130b;box-shadow:0 8px 30px -8px #fff}
+
+.pbody{position:relative;margin:0 26px 26px;border:1px solid var(--line);border-radius:18px;background:#040605}
+.pbody pre{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:13.5px;line-height:1.7;color:#d3dcd8;white-space:pre-wrap;word-wrap:break-word;padding:22px;max-height:340px;overflow:auto;transition:max-height .4s ease}
+.pbody.open pre{max-height:none}
+.pbody:not(.open)::after{content:"";position:absolute;left:1px;right:1px;bottom:56px;height:90px;background:linear-gradient(transparent,#040605);pointer-events:none;border-radius:0}
+.pfoot{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 18px;border-top:1px solid var(--line);font-size:13px;color:var(--mut)}
+.toggle{cursor:pointer;background:none;border:1px solid var(--line);color:var(--txt);font-family:inherit;font-weight:600;font-size:13px;padding:8px 16px;border-radius:10px}
+.toggle:hover{border-color:var(--ac);color:var(--ac)}
+
+.how{margin:10px 0 60px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
+.how div{padding:20px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.025);font-size:14px;color:var(--mut)}
+.how b{display:block;color:var(--txt);font-size:15px;margin-bottom:4px}
+footer{padding:30px 0 50px;text-align:center;color:var(--mut);font-size:13px;border-top:1px solid var(--line)}
+
+.toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,30px);opacity:0;background:#fff;color:#04130b;font-weight:700;padding:12px 22px;border-radius:12px;font-size:14px;transition:.25s;pointer-events:none;z-index:9}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:560px){.phead{padding:20px 18px 14px}.pbody{margin:0 14px 14px}.btn{width:100%;justify-content:center}.arrow{display:none}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav>
+    <div class="brand"><b>Modo</b><span>Analista</span></div>
+    <a class="link" href="#prompt1">Prompts ↓</a>
+  </nav>
+
+  <header class="hero">
+    <h1>Crea y anima<span class="g">tu logo con IA</span></h1>
+    <p>De una idea a una identidad visual en movimiento. Copia cada prompt, pégalo en tu IA y sigue el proceso.</p>
+    <div class="steps">
+      <div class="step"><i>1</i>Crea tu logo en ChatGPT</div>
+      <span class="arrow">→</span>
+      <div class="step s2"><i>2</i>Analízalo y genera el JSON</div>
+      <span class="arrow">→</span>
+      <div class="step"><i>✦</i>Anímalo con tu IA de video</div>
+    </div>
+  </header>
+
+  <section class="pcard a" id="prompt1">
+    <div class="pin">
+      <div class="phead">
+        <div class="ptitle">
+          <div class="num">1</div>
+          <div>
+            <h2>Crea tu logo con ChatGPT</h2>
+            <p>Brief interactivo de 5 preguntas y primera propuesta visual.</p>
+            <div class="tags"><span class="tag">Simple</span><span class="tag">Significativo</span><span class="tag">Singular</span><span class="tag">Escalable</span></div>
+          </div>
+        </div>
+        <button class="btn" data-copy="p1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg><span>Copiar prompt</span></button>
+      </div>
+      <div class="pbody" data-body="p1">
+        <pre id="v1"></pre>
+        <div class="pfoot"><span>Pégalo en ChatGPT (con generación de imágenes)</span><button class="toggle" data-toggle="p1">Ver completo</button></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pcard b" id="prompt2">
+    <div class="pin">
+      <div class="phead">
+        <div class="ptitle">
+          <div class="num">2</div>
+          <div>
+            <h2>Analiza y anima tu logo</h2>
+            <p>Sube tu logo y obtén un prompt en JSON listo para tu IA de animación.</p>
+            <div class="tags"><span class="tag">Análisis</span><span class="tag">Nicho</span><span class="tag">Concepto</span><span class="tag">JSON final</span></div>
+          </div>
+        </div>
+        <button class="btn" data-copy="p2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg><span>Copiar prompt</span></button>
+      </div>
+      <div class="pbody" data-body="p2">
+        <pre id="v2"></pre>
+        <div class="pfoot"><span>Pégalo y sube tu logo junto con el prompt</span><button class="toggle" data-toggle="p2">Ver completo</button></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="how">
+    <div><b>1 · Copia</b>Toca “Copiar prompt” y pégalo en una conversación nueva.</div>
+    <div><b>2 · Responde el brief</b>Contesta las 5 preguntas y pide ajustes hasta que el logo te guste.</div>
+    <div><b>3 · Anima</b>Sube el logo con el segundo prompt y usa el JSON en tu IA de video.</div>
+  </div>
+
+  <footer>Modo Analista · Material de clase</footer>
+</div>
+<div class="toast" id="toast">¡Prompt copiado!</div>
+
+<script type="text/plain" id="p1">Prompt para crear tu logo con Chat GPT
+______________________________________________________
+
+ROL
+
+Actúa como un director de identidad visual y diseñador de logos profesional.
+
+Tu objetivo es crear un logo real: simple, reconocible, memorable, funcional y escalable, que pueda utilizarse profesionalmente en web, aplicaciones, redes sociales, favicons, documentos, impresión y merchandising.
+
+Prioriza siempre:
+
+Simplicidad + reconocimiento + significado + versatilidad.
+
+---
+
+FASE 1 — BRIEF INTERACTIVO OBLIGATORIO
+
+Antes de generar cualquier imagen, hazme 5 preguntas para entender la marca.
+
+IMPORTANTE:
+
+NO presentes las preguntas como una lista de texto convencional.
+
+Siempre que la interfaz de ChatGPT lo permita, utiliza el cuestionario interactivo de creación de imágenes, mostrando botones, opciones seleccionables, campos de texto y opción para subir imágenes.
+
+Quiero poder responder tocando opciones, igual que en los cuestionarios interactivos de ChatGPT.
+
+Cuando una pregunta requiera información específica, utiliza campo de texto.
+
+Cuando existan alternativas claras, utiliza opciones seleccionables.
+
+Cuando una referencia visual pueda ayudar, incluye la posibilidad de subir una imagen.
+
+Las 5 preguntas serán:
+
+1. EMPRESA
+
+Pregunta:
+
+¿Cómo se llama la empresa y qué hace?
+
+Utiliza un campo de texto.
+
+Debe permitirme escribir brevemente:
+
+- Nombre
+- Actividad
+- Producto o servicio principal
+
+---
+
+2. PERSONALIDAD
+
+Pregunta:
+
+¿Qué debería transmitir el logo al verlo?
+
+Utiliza opciones seleccionables.
+
+Por ejemplo:
+
+- Tecnología e innovación
+- Confianza y solidez
+- Premium y exclusivo
+- Cercano y humano
+- Energía y crecimiento
+- Creatividad
+- Elegancia y sofisticación
+- Otro
+
+Permite seleccionar más de una cuando sea útil.
+
+---
+
+3. TIPO DE LOGO
+
+Pregunta:
+
+¿Qué tipo de logo te atrae más?
+
+Utiliza opciones visuales seleccionables cuando la interfaz lo permita.
+
+Opciones:
+
+- Símbolo
+- Solo nombre / Wordmark
+- Iniciales / Monograma
+- Nombre + símbolo
+- Abstracto
+- Emblema
+- Mascota
+- No lo sé, recomiéndame
+
+Si ChatGPT dispone de ejemplos visuales interactivos para estos estilos, muéstralos para que pueda elegir visualmente.
+
+---
+
+4. DIRECCIÓN VISUAL
+
+Pregunta:
+
+¿Qué dirección visual imaginas para la marca?
+
+Utiliza opciones seleccionables como:
+
+- Minimalista
+- Geométrica
+- Tecnológica
+- Premium
+- Elegante
+- Futurista
+- Amigable
+- Corporativa
+- Tú decide
+
+Permite también escribir otra opción.
+
+No me obligues a conocer terminología profesional de diseño.
+
+---
+
+5. REFERENCIA VISUAL
+
+Pregunta:
+
+¿Tienes alguna referencia o branding que quieras que considere?
+
+Permíteme:
+
+- Subir una imagen
+- Compartir un logo
+- Subir un boceto
+- Mostrar una paleta
+- Mostrar branding existente
+- Mostrar una referencia estética
+- Indicar que no tengo referencia
+
+La referencia NO debe copiarse.
+
+Debe utilizarse únicamente para comprender la dirección visual, simplicidad, personalidad, composición o colores que me atraen.
+
+---
+
+IMPORTANTE DURANTE EL BRIEF
+
+No generes ningún logo hasta que haya contestado las preguntas.
+
+No hagas preguntas técnicas innecesarias sobre tipografía, proporciones, geometría o teoría del diseño.
+
+Yo proporciono la información del negocio y mis preferencias.
+
+Tú tomas las decisiones profesionales de diseño.
+
+---
+
+FASE 2 — CONCEPTUALIZACIÓN
+
+Una vez respondido el brief, analiza internamente:
+
+- Qué representa la empresa.
+- Qué hace diferente al negocio.
+- Qué conceptos podrían convertirse en símbolos.
+- Qué debería comunicar visualmente.
+- Qué elementos serían demasiado obvios o genéricos.
+- Cómo lograr que el símbolo tenga significado sin hacerlo complejo.
+
+Busca combinar dos o más ideas de la empresa en una sola forma simple.
+
+Ejemplos conceptuales:
+
+Nombre + producto
+Inicial + función
+Conexión + modularidad
+Movimiento + crecimiento
+Datos + simplicidad
+
+No inventes primero una figura y después intentes justificarla.
+
+El concepto debe existir antes que el dibujo.
+
+---
+
+FASE 3 — GENERACIÓN
+
+Después del brief, genera directamente la primera propuesta visual.
+
+No me entregues solamente un prompt.
+
+Utiliza la herramienta de generación de imágenes disponible en ChatGPT para crear el logo.
+
+La primera propuesta debe ser:
+
+- Minimalista
+- Plana
+- Geométricamente limpia
+- Fácil de reconocer
+- Con pocos elementos
+- Máximo 1–2 colores principales
+- Sin detalles innecesarios
+- Reconocible en tamaños pequeños
+- Funcional como favicon
+- Reproducible en impresión
+
+Muéstrala sobre un fondo limpio.
+
+NO utilices inicialmente:
+
+- Mockups
+- 3D
+- Relieves
+- Sombras
+- Brillos
+- Efectos metálicos
+- Texturas
+- Escenarios
+- Presentaciones de branding
+
+Primero quiero ver el logo real.
+
+Debe poder funcionar también completamente en negro sobre blanco.
+
+---
+
+EVITA LOGOS GENÉRICOS
+
+No recurras automáticamente a clichés del sector.
+
+Por ejemplo, para tecnología evita utilizar sin una razón conceptual:
+
+- Circuitos
+- Cerebros
+- Código </ >
+- Nubes
+- Computadoras
+- Engranes
+- Gráficas ascendentes
+
+El objetivo no es que parezca simplemente “una empresa tecnológica”.
+
+El objetivo es que pueda llegar a reconocerse como esa empresa específica.
+
+---
+
+DESPUÉS DE GENERARLO
+
+Cuando muestres la propuesta, explícame:
+
+Concepto: qué representa.
+
+Relación con la empresa: por qué tiene sentido específicamente para este negocio.
+
+Construcción: qué representan sus formas.
+
+Color: por qué utilizaste esos colores.
+
+Versatilidad: cómo funcionaría en favicon, aplicación, redes, web e impresión.
+
+Mantén la explicación sencilla.
+
+---
+
+ITERACIÓN
+
+La primera propuesta NO tiene que ser definitiva.
+
+Espera mi reacción.
+
+Si digo:
+
+“Más simple” → simplifica.
+
+“Más geométrico” → conserva el concepto y cambia la construcción.
+
+“No me gusta esta parte” → modifica esa parte.
+
+“Prueba otra idea” → crea un concepto realmente diferente.
+
+No hagas simplemente pequeñas variaciones cuando pida otra dirección.
+
+---
+
+CUANDO APRUEBE EL CONCEPTO
+
+Solo cuando diga explícitamente que el logo me gusta, desarrolla posteriormente:
+
+- Símbolo aislado
+- Logo + nombre
+- Horizontal
+- Vertical
+- Negro sobre blanco
+- Blanco sobre negro
+- Versión a color
+- Fondo transparente
+- Favicon
+- Icono para redes
+- Paleta
+- Tipografía recomendada
+- Área de seguridad
+- Usos correctos e incorrectos
+
+---
+
+REGLA MAESTRA
+
+Primero entender.
+Después conceptualizar.
+Después simplificar.
+Después diseñar.
+Finalmente construir la identidad.
+
+Comienza ahora utilizando el cuestionario interactivo con opciones seleccionables de ChatGPT para hacerme las 5 preguntas del brief.
+
+No generes ninguna imagen todavía.</script>
+
+<script type="text/plain" id="p2">Prompt para animar analizar y animar tu logo
+______________________________________________________
+
+Actúa como director creativo senior, experto en branding, motion design 3D y prompt engineering.
+Voy a subirte un logo. Tu trabajo no es animarlo, sino analizarlo a fondo y luego crear un prompt final en formato JSON para otra IA, que será la que haga la animación.
+Primero, estudia bien el logo: su forma, tipografía, símbolo, composición, estilo, colores, geometría y posibilidades de movimiento. También tómate tu tiempo para identificar a qué nicho, industria o tipo de marca pertenece, porque la animación debe adaptarse tanto al diseño del logo como a su universo visual.
+Tu proceso debe ser:
+1. Analizar el logo.
+2. Detectar el nicho o estilo de marca.
+3. Definir la animación ideal según ese análisis.
+4. Entregar un prompt final en JSON, listo para usar.
+La animación debe verse:
+- 3D
+- premium
+- profesional
+- cinematográfica
+- con el mayor movimiento posible, pero con criterio
+- fiel a la identidad del logo
+- impactante y limpia
+El JSON debe pedir una animación con:
+- movimiento principal y secundarios
+- profundidad y volumen
+- materiales y texturas
+- iluminación cinematográfica
+- cámara dinámica
+- reflejos, sombras y microdetalles
+- entrada potente
+- desarrollo atractivo
+- cierre limpio y memorable
+Adapta siempre la animación al logo:
+- minimalista = elegante y sutil
+- tecnológico = futurista y preciso
+- premium = refinado y sobrio
+- deportivo = energético y fuerte
+- creativo u orgánico = fluido y expresivo
+Responde con esta estructura:
+1. Análisis del logo
+2. Nicho o tipo de marca
+3. Concepto de animación ideal
+4. Prompt final en JSON
+Reglas:
+- no hagas propuestas genéricas
+- no uses la misma animación para todos los logos
+- el JSON debe ser el entregable principal
+- la otra IA solo debe ejecutar la animación que tú definas
+- quiero un resultado de nivel comercial alto
+Entrega el JSON limpio, bien estructurado y listo para copiar.</script>
+
+<script>
+(function(){
+  var $=function(s,r){return (r||document).querySelector(s)};
+  var texts={p1:$('#p1').textContent,p2:$('#p2').textContent};
+  $('#v1').textContent=texts.p1;
+  $('#v2').textContent=texts.p2;
+
+  var toast=$('#toast'),tt;
+  function showToast(){toast.classList.add('show');clearTimeout(tt);tt=setTimeout(function(){toast.classList.remove('show')},1800)}
+  function fallback(t){
+    var a=document.createElement('textarea');a.value=t;a.style.position='fixed';a.style.opacity='0';
+    document.body.appendChild(a);a.select();var ok=false;
+    try{ok=document.execCommand('copy')}catch(e){}
+    document.body.removeChild(a);return ok;
+  }
+  document.querySelectorAll('[data-copy]').forEach(function(b){
+    b.addEventListener('click',function(){
+      var t=texts[b.dataset.copy],label=$('span',b),orig=label.textContent;
+      function done(){
+        b.classList.add('ok');label.textContent='¡Copiado!';showToast();
+        setTimeout(function(){b.classList.remove('ok');label.textContent=orig},2000);
+      }
+      if(navigator.clipboard&&window.isSecureContext){
+        navigator.clipboard.writeText(t).then(done,function(){fallback(t)&&done()});
+      }else if(fallback(t)){done()}
+    });
+  });
+  document.querySelectorAll('[data-toggle]').forEach(function(b){
+    b.addEventListener('click',function(){
+      var body=$('[data-body="'+b.dataset.toggle+'"]');
+      var open=body.classList.toggle('open');
+      b.textContent=open?'Ver menos':'Ver completo';
+    });
+  });
+})();
+</script>
+</body>
+</html>
