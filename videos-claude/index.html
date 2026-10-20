@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Videos con Claude — Modo Analista</title>
+<meta name="description" content="Prompts y recursos de la mentoría. Copia y pega."/>
+<meta name="theme-color" content="#050807"/>
+<meta name="robots" content="noindex"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Rajdhani:wght@600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#050807; --line:rgba(255,255,255,.09);
+  --txt:#f2f5f4; --mut:#9aa6a1;
+  --green:#1fe58a; --purple:#9b6bff; --blue:#35a8ff; --amber:#ffb23e;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--txt);font-family:'Inter',system-ui,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;z-index:-1;
+  background:
+   radial-gradient(900px 500px at 85% -10%,rgba(31,229,138,.16),transparent 60%),
+   radial-gradient(700px 500px at -10% 40%,rgba(31,229,138,.07),transparent 60%),
+   radial-gradient(800px 600px at 60% 110%,rgba(155,107,255,.08),transparent 60%)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+
+.brand{font-family:'Rajdhani',sans-serif;font-weight:700;letter-spacing:.04em;font-size:22px;text-transform:uppercase;display:inline-flex;gap:8px;align-items:center}
+.brand::before,.brand::after{content:"";width:8px;height:26px;border:2px solid var(--green);border-right:0}
+.brand::after{border:2px solid var(--green);border-left:0}
+.brand b{color:var(--green)}
+.brand span{color:#dfe5e2}
+nav{padding:26px 0;display:flex;justify-content:space-between;align-items:center;gap:16px}
+nav a.link{color:var(--mut);text-decoration:none;font-size:14px;font-weight:500}
+nav a.link:hover{color:var(--green)}
+
+.hero{padding:48px 0 56px}
+.hero h1{font-weight:900;font-size:clamp(40px,8vw,88px);line-height:.98;letter-spacing:-.025em;text-transform:uppercase}
+.hero h1 .g{background:linear-gradient(180deg,#7dffc4,#1fe58a 60%,#0fa863);-webkit-background-clip:text;background-clip:text;color:transparent;display:block}
+.hero p{margin-top:22px;color:var(--mut);font-size:clamp(16px,2.2vw,20px);max-width:560px}
+.steps{margin-top:34px;display:flex;gap:14px;flex-wrap:wrap}
+.step{display:flex;align-items:center;gap:10px;padding:10px 16px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.03);font-size:14px;font-weight:600}
+.step i{font-style:normal;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:800;color:#04130b;background:var(--ac,var(--green))}
+.arrow{color:var(--green);align-self:center}
+
+.pcard{position:relative;margin:0 0 36px;border-radius:26px;padding:1px;
+  background:linear-gradient(160deg,var(--c1),rgba(255,255,255,.05) 40%,rgba(255,255,255,.03) 60%,var(--c1))}
+.pcard.c-green{--c1:rgba(31,229,138,.7);--ac:var(--green);--fg:#04130b}
+.pcard.c-purple{--c1:rgba(155,107,255,.75);--ac:var(--purple);--fg:#fff}
+.pcard.c-blue{--c1:rgba(53,168,255,.75);--ac:var(--blue);--fg:#031320}
+.pcard.c-amber{--c1:rgba(255,178,62,.75);--ac:var(--amber);--fg:#1c1100}
+.pin{background:linear-gradient(180deg,#0c1210,#060908);border-radius:25px;overflow:hidden;box-shadow:0 30px 80px -30px var(--c1)}
+.phead{padding:26px 26px 18px;display:flex;gap:18px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}
+.ptitle{display:flex;gap:16px;align-items:flex-start;flex:1;min-width:260px}
+.num{flex:none;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-weight:900;font-size:20px;color:var(--fg);background:var(--ac);box-shadow:0 0 28px -2px var(--ac)}
+.ptitle h2{font-size:clamp(22px,3.6vw,32px);font-weight:900;text-transform:uppercase;letter-spacing:-.01em;line-height:1.1}
+.ptitle p{color:var(--mut);margin-top:6px;font-size:15px}
+.tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.tag{font-size:12px;font-weight:600;padding:5px 12px;border-radius:999px;border:1px solid var(--line);color:#cdd6d2;background:rgba(255,255,255,.03)}
+
+.btn{cursor:pointer;border:0;font-family:inherit;display:inline-flex;align-items:center;gap:9px;padding:13px 22px;border-radius:14px;font-weight:800;font-size:15px;color:var(--fg);background:var(--ac);transition:transform .15s,box-shadow .2s,filter .2s;box-shadow:0 8px 30px -8px var(--ac);text-decoration:none}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.08)}
+.btn:active{transform:translateY(0) scale(.98)}
+.btn svg{width:18px;height:18px}
+.btn.ok{background:#fff;color:#04130b;box-shadow:0 8px 30px -8px #fff}
+
+.pbody{position:relative;margin:0 26px 26px;border:1px solid var(--line);border-radius:18px;background:#040605}
+.pbody pre{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:13.5px;line-height:1.7;color:#d3dcd8;white-space:pre-wrap;word-wrap:break-word;padding:22px;max-height:340px;overflow:auto;transition:max-height .4s ease}
+.pbody.open pre,.pbody.short pre{max-height:none}
+.pbody.short::after,.pbody.short .toggle{display:none}
+.pbody:not(.open)::after{content:"";position:absolute;left:1px;right:1px;bottom:56px;height:90px;background:linear-gradient(transparent,#040605);pointer-events:none}
+.pfoot{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 18px;border-top:1px solid var(--line);font-size:13px;color:var(--mut)}
+.toggle{cursor:pointer;background:none;border:1px solid var(--line);color:var(--txt);font-family:inherit;font-weight:600;font-size:13px;padding:8px 16px;border-radius:10px}
+.toggle:hover{border-color:var(--ac);color:var(--ac)}
+
+.sec{margin:56px 0 22px;font-weight:900;font-size:clamp(24px,4vw,36px);text-transform:uppercase;letter-spacing:-.01em}
+.sec small{display:block;font-size:15px;font-weight:500;color:var(--mut);text-transform:none;letter-spacing:0;margin-top:6px}
+.res{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:56px}
+.rcard{display:flex;flex-direction:column;gap:10px;padding:22px;border:1px solid var(--line);border-radius:20px;background:linear-gradient(180deg,#0c1210,#060908);text-decoration:none;color:inherit;transition:transform .2s,border-color .2s}
+.rcard:hover{transform:translateY(-3px);border-color:var(--ac)}
+.rcard .ico{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-size:20px;background:rgba(255,255,255,.05);border:1px solid var(--line)}
+.rcard b{font-size:17px}
+.rcard span{color:var(--mut);font-size:14px}
+.rcard em{margin-top:auto;font-style:normal;font-weight:700;font-size:14px;color:var(--ac)}
+
+.how{margin:10px 0 60px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
+.how div{padding:20px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.025);font-size:14px;color:var(--mut)}
+.how b{display:block;color:var(--txt);font-size:15px;margin-bottom:4px}
+footer{padding:30px 0 50px;text-align:center;color:var(--mut);font-size:13px;border-top:1px solid var(--line)}
+
+.toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,30px);opacity:0;background:#fff;color:#04130b;font-weight:700;padding:12px 22px;border-radius:12px;font-size:14px;transition:.25s;pointer-events:none;z-index:9}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:560px){.phead{padding:20px 18px 14px}.pbody{margin:0 14px 14px}.btn{width:100%;justify-content:center}.arrow{display:none}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav>
+    <div class="brand"><b>Modo</b><span>Analista</span></div>
+    <a class="link" href="#prompts">Prompts ↓</a>
+  </nav>
+
+  <header class="hero">
+    <h1 id="h-title">Título de la <span class="g">mentoría</span></h1>
+    <p id="h-sub"></p>
+    <div class="steps" id="h-steps"></div>
+  </header>
+
+  <main id="prompts"></main>
+
+  <section id="res-sec" hidden>
+    <h2 class="sec" id="res-title"></h2>
+    <div class="res" id="res"></div>
+  </section>
+
+  <div class="how" id="how"></div>
+
+  <footer>Modo Analista · Material de clase</footer>
+</div>
+<div class="toast" id="toast">¡Prompt copiado!</div>
+
+<script>
+/* =====================================================================
+   CONFIGURACIÓN — edita solo este bloque
+   Colores de tarjeta disponibles: green | purple | blue | amber
+   Dentro de los prompts usa comillas invertidas (`) y evita escribir ${ o `.
+   ===================================================================== */
+var CONFIG = {
+  title: ['Crea videos con Claude', 'sin salir a cámara'],          // [parte blanca, parte verde]
+  subtitle: 'Crea la mascota de tu marca y conviértela en el rostro de tus videos para TikTok e Instagram.',
+
+  // Pasos que aparecen bajo el título (opcional, deja [] para ocultar)
+  steps: [
+    { n: '1', text: 'Crea tu mascota con IA', color: 'green' },
+    { n: '2', text: 'Dale vida con Hyperframes', color: 'purple' },
+    { n: '✦', text: 'Publica en TikTok e Instagram', color: 'green' }
+  ],
+
+  // Un objeto por prompt. Agrega o quita los que necesites.
+  prompts: [
+    {
+      color: 'green',
+      title: 'Crea tu mascota de marca',
+      desc: 'Entrevista guiada, 3 propuestas de personaje, mascota sin fondo, 20 poses y manual de consistencia.',
+      tags: ['Mascota', '20 poses', 'Sin fondo', 'Manual'],
+      hint: 'Pégalo en una conversación nueva con generación de imágenes',
+      text: `# PROMPT MAESTRO — CREA TU MASCOTA DE MARCA CON IA
+
+## ROL Y MISIÓN
+
+Actúa como director creativo senior, estratega de branding, diseñador profesional de personajes 2D y 3D, especialista en identidad visual y experto en generación de imágenes con inteligencia artificial.
+
+Tu misión es guiarme desde cero para crear una mascota o personaje original que represente auténticamente mi marca.
+
+No quiero simplemente una imagen bonita. Quiero desarrollar un personaje estratégico, memorable, reconocible y consistente, que pueda convertirse en el rostro de mi marca y utilizarse en contenido para redes sociales, especialmente videos para TikTok, Instagram y otras plataformas.
+
+Debes acompañarme durante todo el proceso, desde las primeras preguntas hasta la entrega de las imágenes finales.
+
+---
+
+# OBJETIVO FINAL OBLIGATORIO
+
+Al terminar este proceso debo contar con cuatro entregables:
+
+**ENTREGABLE 1 — MASCOTA PRINCIPAL**
+
+Una imagen individual de mi mascota:
+- Cuerpo completo.
+- Fondo 100 % transparente.
+- Formato PNG con transparencia real, cuando esté disponible.
+- Alta resolución.
+- Diseño profesional.
+- Sin textos ni etiquetas.
+- Sin escenarios.
+- Sin elementos decorativos innecesarios.
+- Lista para utilizarse en contenido y animaciones.
+
+**ENTREGABLE 2 — BIBLIOTECA VISUAL DE 20 POSES**
+
+Dos láminas organizadas con 10 poses diferentes cada una.
+
+Cada pose debe incluir obligatoriamente:
+- La misma mascota.
+- Una posición, acción o emoción diferente.
+- Su nombre descriptivo en español, colocado debajo del personaje.
+- Composición limpia y profesional.
+
+**ENTREGABLE 3 — 20 POSES INDIVIDUALES**
+
+Las mismas 20 poses de la biblioteca, pero:
+- En imágenes individuales.
+- Sin fondo.
+- Sin etiquetas.
+- Sin textos.
+- Conservando la identidad del personaje.
+- Preparadas para utilizarlas en herramientas de generación de video.
+
+**ENTREGABLE 4 — MANUAL DE CONSISTENCIA**
+
+Una guía breve que permita conservar la identidad visual del personaje en futuras generaciones.
+
+No consideres terminado el trabajo hasta completar los entregables que tus herramientas permitan producir y confirmar cuáles están pendientes.
+
+Si una función no está disponible, explícalo claramente y ofrece una alternativa práctica. Nunca afirmes haber generado archivos que no existen.
+
+---
+
+# ETAPA 1 — ENTREVISTA ESTRATÉGICA
+
+Antes de generar cualquier imagen, necesitas conocer mi marca.
+
+Realiza una entrevista guiada, sencilla y conversacional.
+
+Haz preguntas organizadas en bloques pequeños, con un máximo de 4 preguntas por bloque.
+
+No me presentes un cuestionario enorme de una sola vez.
+
+Utiliza un lenguaje comprensible para personas sin conocimientos de diseño.
+
+## BLOQUE A — IDENTIDAD DE MARCA
+
+Investiga:
+
+1. ¿Cómo se llama mi marca?
+2. ¿A qué se dedica y qué productos o servicios ofrece?
+3. ¿Quién es su público objetivo?
+4. ¿Qué diferencia a mi marca de otras similares?
+
+## BLOQUE B — PERSONALIDAD Y VALORES
+
+Investiga:
+
+5. ¿Qué tres valores representan a mi marca?
+6. ¿Qué emociones quiero transmitir a mi audiencia?
+7. ¿Cómo es la personalidad de mi marca?
+8. ¿Qué estilo de comunicación utiliza?
+
+Puedes dar ejemplos como:
+- Divertida.
+- Inteligente.
+- Profesional.
+- Cercana.
+- Elegante.
+- Tecnológica.
+- Creativa.
+- Rebelde.
+- Amigable.
+- Educativa.
+
+## BLOQUE C — FUNCIÓN DE LA MASCOTA
+
+Investiga:
+
+9. ¿Para qué quiero utilizar mi mascota?
+10. ¿Qué actividades realizará dentro del contenido?
+11. ¿Será la imagen principal de mi marca o un personaje de apoyo?
+12. ¿En qué plataformas y formatos aparecerá?
+
+Considera funciones como:
+- Presentar videos.
+- Explicar conceptos.
+- Enseñar.
+- Dar consejos.
+- Promocionar productos.
+- Contar historias.
+- Entretener.
+- Representar la personalidad de la marca.
+
+## BLOQUE D — IDENTIDAD VISUAL
+
+Investiga:
+
+13. ¿Cuáles son los colores de mi marca?
+14. ¿Tengo un logo o identidad visual existente?
+15. ¿Tengo referencias de personajes o estilos que me gusten?
+16. ¿Hay elementos que definitivamente no quiero?
+
+Permite que adjunte imágenes de referencia cuando lo considere necesario.
+
+## BLOQUE E — TIPO DE PERSONAJE
+
+Pregunta:
+
+17. ¿Tengo preferencia por un animal, humano, robot, criatura fantástica, objeto personificado u otro tipo de personaje?
+18. ¿Prefiero estilo 2D, 3D, caricatura, semirrealista, cinematográfico o no estoy seguro?
+19. ¿Qué tan expresivo debe ser el personaje?
+20. ¿Debe utilizar vestimenta, accesorios o elementos distintivos?
+
+Si no conozco las respuestas, recomiéndame opciones basándote en mi marca.
+
+No obligues al usuario a definir aspectos técnicos que desconoce.
+
+### REGLA DE ESTA ETAPA
+
+No avances hasta tener información suficiente para desarrollar una propuesta fundamentada.
+
+No repitas preguntas que ya respondí.
+
+---
+
+# ETAPA 2 — ANÁLISIS ESTRATÉGICO
+
+Cuando termine la entrevista, analiza todas mis respuestas.
+
+Presenta:
+
+**1. Resumen de mi marca**
+- Nombre.
+- Actividad.
+- Público objetivo.
+- Personalidad.
+- Valores.
+- Estilo visual.
+- Función de la mascota.
+
+**2. Interpretación creativa**
+
+Explica qué características debería tener un personaje que represente esta marca.
+
+**3. Tres propuestas de mascota**
+
+Propón tres conceptos diferentes.
+
+Cada propuesta debe contener:
+- Nombre sugerido.
+- Tipo de personaje.
+- Concepto.
+- Simbolismo.
+- Personalidad.
+- Estilo visual.
+- Relación con los valores de la marca.
+- Razón por la que funcionaría en redes sociales.
+
+Las propuestas deben ser originales y realmente diferentes entre sí.
+
+No propongas automáticamente un robot para una empresa tecnológica ni un animal simpático para cualquier negocio.
+
+Busca conceptos con significado.
+
+Finalmente, recomiéndame cuál de las tres opciones es estratégicamente más fuerte y explica por qué.
+
+**Espera a que elija una propuesta antes de continuar.**
+
+---
+
+# ETAPA 3 — DEFINICIÓN DEL PERSONAJE
+
+Una vez seleccionada la propuesta, desarrolla su identidad definitiva.
+
+Define:
+
+1. Nombre oficial.
+2. Especie o tipo de personaje.
+3. Concepto y simbolismo.
+4. Personalidad.
+5. Rasgos emocionales.
+6. Expresiones características.
+7. Lenguaje corporal.
+8. Silueta.
+9. Proporciones.
+10. Colores exactos o aproximados.
+11. Vestimenta.
+12. Accesorios.
+13. Rasgos físicos distintivos.
+14. Estilo artístico.
+15. Nivel de detalle.
+16. Función en contenido digital.
+17. Elementos que nunca deben modificarse.
+
+Presenta una ficha de identidad visual organizada.
+
+Después pregúntame:
+
+**"¿Apruebas esta identidad para que genere la primera imagen de tu mascota, o quieres modificar algún detalle?"**
+
+Espera mi respuesta.
+
+---
+
+# ETAPA 4 — GENERACIÓN DE LA MASCOTA PRINCIPAL
+
+Una vez aprobada la identidad, genera la primera imagen oficial.
+
+## CARACTERÍSTICAS OBLIGATORIAS
+
+- Una sola mascota.
+- Cuerpo completo.
+- Posición neutral o ligeramente expresiva.
+- Vista frontal o tres cuartos.
+- Composición centrada.
+- Personaje completamente visible.
+- Sin cortes de cabeza, manos, pies, alas o accesorios.
+- Fondo totalmente transparente.
+- Sin sombras de escenario.
+- Sin textos.
+- Sin letras.
+- Sin marcas de agua.
+- Sin objetos externos innecesarios.
+- Iluminación profesional.
+- Acabados de alta calidad.
+- Total fidelidad al contexto desarrollado.
+
+El estilo visual debe elegirse en función de la marca, no por una preferencia automática hacia el 3D.
+
+## INSTRUCCIÓN DE GENERACIÓN
+
+Utiliza toda la información aprobada durante la conversación para construir un prompt visual detallado.
+
+Después genera directamente la imagen, si tu herramienta lo permite.
+
+No te limites a entregarme el prompt si puedes producir la imagen.
+
+Si el sistema no permite transparencia real, indícalo. No confundas un fondo blanco o cuadriculado con un PNG transparente.
+
+## VALIDACIÓN
+
+Después de generar la imagen, pregúntame:
+
+**"Esta es la primera versión de tu mascota. ¿La aprobamos como diseño oficial o quieres ajustar algo?"**
+
+Si solicito cambios, modifica únicamente los elementos indicados y conserva los demás.
+
+No avances a la biblioteca hasta recibir mi aprobación.
+
+Una vez aprobada, considera esta imagen como la **REFERENCIA MAESTRA DE IDENTIDAD**.
+
+---
+
+# ETAPA 5 — BLOQUEO DE IDENTIDAD VISUAL
+
+Antes de generar las poses, crea una ficha técnica que defina todas las características permanentes.
+
+## ELEMENTOS BLOQUEADOS
+
+- Anatomía.
+- Silueta.
+- Proporciones.
+- Rostro.
+- Ojos.
+- Nariz, hocico o pico, si aplica.
+- Colores.
+- Texturas.
+- Vestimenta.
+- Accesorios.
+- Calzado, si aplica.
+- Emblemas.
+- Materiales.
+- Estilo de iluminación.
+- Acabado artístico.
+
+Utiliza la imagen principal aprobada como referencia visual prioritaria para todas las generaciones siguientes.
+
+No rediseñes al personaje al cambiar de pose.
+
+No agregues ni elimines accesorios permanentes.
+
+No cambies la especie, anatomía, vestimenta ni personalidad visual.
+
+Permite únicamente las modificaciones necesarias para representar la acción, la emoción o el ángulo solicitado.
+
+Si una pose requiere utilizar un objeto, como una computadora, ese objeto puede añadirse temporalmente sin modificar el diseño base.
+
+---
+
+# ETAPA 6 — PLANIFICACIÓN DE LA BIBLIOTECA
+
+Debes crear una biblioteca de exactamente 20 poses.
+
+Las poses deben estar relacionadas con el contexto y las funciones del personaje.
+
+No utilices automáticamente las mismas poses para todas las marcas.
+
+## EJEMPLOS DE POSES
+
+1. Neutral.
+2. Saludando.
+3. Señalando.
+4. Explicando.
+5. Pensativo.
+6. Feliz.
+7. Sorprendido.
+8. Celebrando.
+9. Aprobando.
+10. Invitando a seguir.
+11. Usando laptop.
+12. Presentando.
+13. Mostrando datos.
+14. Profesional / Serio.
+15. Guiñando el ojo.
+16. Confundido.
+17. Escuchando.
+18. Trabajando.
+19. Compartiendo una idea.
+20. Despidiéndose.
+
+**IMPORTANTE:** Esta lista es orientativa, no obligatoria.
+
+Adapta las 20 poses a la actividad real de la marca.
+
+Por ejemplo:
+- Una mascota educativa puede explicar, señalar, leer o presentar información.
+- Una mascota gastronómica puede cocinar, probar comida o recomendar productos.
+- Una mascota deportiva puede entrenar, celebrar o motivar.
+- Una mascota financiera puede analizar gráficas o explicar resultados.
+- Una mascota de entretenimiento puede bailar, reaccionar o realizar expresiones divertidas.
+
+Antes de generar, presenta la lista final de 20 poses con su nombre exacto en español.
+
+---
+
+# ETAPA 7 — GENERACIÓN DE LA BIBLIOTECA VISUAL
+
+Una vez definidas las poses, genera dos láminas profesionales.
+
+## LÁMINA 1 — POSES 1 A 10
+
+Genera una composición que contenga:
+
+- Exactamente 10 representaciones de la mascota.
+- Distribución de 5 columnas por 2 filas.
+- Cinco personajes en la primera fila.
+- Cinco personajes en la segunda fila.
+- Espaciado uniforme.
+- Escala consistente.
+- Fondo blanco o neutro.
+- Personajes completamente visibles.
+- Calidad profesional.
+
+## LÁMINA 2 — POSES 11 A 20
+
+Utiliza exactamente el mismo formato que la primera lámina.
+
+Mantén:
+- Mismas proporciones.
+- Misma organización.
+- Misma tipografía.
+- Mismo fondo.
+- Misma separación.
+- Mismo estilo visual.
+- Misma mascota.
+
+## REGLA OBLIGATORIA — ETIQUETAS
+
+**TODAS LAS POSES DEBEN TENER DEBAJO EL NOMBRE DE LA ACCIÓN O EMOCIÓN QUE REPRESENTAN.**
+
+No es opcional.
+
+Cada pose debe contar con una etiqueta independiente.
+
+### CARACTERÍSTICAS DE LAS ETIQUETAS
+
+1. Deben estar escritas en español.
+2. Deben aparecer debajo del personaje correspondiente.
+3. Deben estar centradas horizontalmente.
+4. Deben ser legibles.
+5. Deben utilizar la misma tipografía.
+6. Deben mantener tamaño y estilo uniformes.
+7. Deben describir exactamente la acción o emoción representada.
+8. Deben tener buena ortografía.
+9. No deben superponerse al personaje.
+10. Ninguna pose puede quedarse sin etiqueta.
+
+Utiliza expresiones breves como:
+- "Saludando"
+- "Explicando"
+- "Pensativo"
+- "Usando laptop"
+- "Celebrando"
+- "Mostrando datos"
+- "Guiñando el ojo"
+
+No coloques números en lugar de descripciones.
+
+No agregues títulos largos, párrafos ni información adicional dentro de las láminas.
+
+### CRITERIOS DE CALIDAD
+
+Las dos láminas deben parecer parte de una misma biblioteca oficial de marca.
+
+Evita:
+- Personajes deformados.
+- Cambios de vestimenta.
+- Diferencias inexplicables de rostro.
+- Accesorios permanentes desaparecidos.
+- Extremidades adicionales.
+- Poses repetidas.
+- Etiquetas incorrectas.
+- Textos ilegibles.
+- Personajes recortados.
+- Diferencias bruscas de escala.
+
+Genera primero la lámina 1 y después la lámina 2.
+
+Comprueba que cada una contenga 10 poses distintas y que todas tengan su etiqueta.
+
+Si las etiquetas contienen errores, corrígelas. Si el generador de imágenes no puede escribirlas correctamente, crea las etiquetas por separado mediante una herramienta de composición o edición de texto, cuando esté disponible.
+
+No presentes una lámina con errores de texto como versión definitiva.
+
+---
+
+# ETAPA 8 — GENERACIÓN DE LAS 20 IMÁGENES INDIVIDUALES
+
+Después de completar las dos láminas, prepara cada pose como imagen independiente.
+
+Estas imágenes serán utilizadas para generar videos con IA.
+
+## REQUISITOS
+
+Cada archivo debe contener:
+- Únicamente la mascota.
+- Una sola pose.
+- Fondo transparente real.
+- Sin texto.
+- Sin etiquetas.
+- Sin escenario.
+- Sin marcos.
+- Sin marcas de agua.
+- Personaje completo.
+- Alta resolución.
+- Estilo idéntico al diseño aprobado.
+
+Los accesorios temporales asociados con la acción pueden permanecer.
+
+## REGLA DE CONSISTENCIA
+
+Todas las imágenes deben tomar como referencia la mascota principal aprobada y la ficha de identidad visual.
+
+No utilices las etiquetas ni los fondos de las láminas como parte del personaje.
+
+Si generas las poses por separado, evita recrear desde cero la identidad del personaje.
+
+Usa la imagen principal como referencia visual en cada generación, siempre que la herramienta lo permita.
+
+## FORMA DE TRABAJO
+
+Si no puedes crear 20 archivos simultáneamente:
+
+1. Divide la generación en bloques pequeños.
+2. Genera las imágenes individualmente.
+3. Comprueba la consistencia.
+4. Continúa hasta completar las 20.
+5. Indica cuáles están terminadas y cuáles faltan.
+
+No sustituyas las imágenes individuales por una sola lámina si es posible entregar archivos separados.
+
+---
+
+# ETAPA 9 — MANUAL DE CONSISTENCIA
+
+Al finalizar, genera un documento breve titulado:
+
+## MANUAL OFICIAL DE LA MASCOTA
+
+Incluye:
+
+1. Nombre del personaje.
+2. Descripción oficial.
+3. Personalidad.
+4. Función dentro de la marca.
+5. Colores principales.
+6. Características físicas permanentes.
+7. Vestimenta y accesorios.
+8. Estilo visual.
+9. Expresiones características.
+10. Reglas para mantener consistencia.
+11. Elementos que no deben modificarse.
+12. Recomendaciones para utilizarlo en videos.
+13. Prompt base para recrear el personaje en otras escenas.
+
+El prompt base debe incorporar la descripción visual definitiva, pero debe indicar que la imagen oficial aprobada es la referencia visual prioritaria.
+
+---
+
+# ETAPA 10 — REVISIÓN FINAL
+
+Antes de concluir, realiza esta comprobación:
+
+### MASCOTA PRINCIPAL
+- ¿La imagen individual está aprobada?
+- ¿Tiene fondo transparente real?
+- ¿Se observa completa?
+- ¿Respeta la identidad de marca?
+
+### BIBLIOTECA
+- ¿Existen 20 poses diferentes?
+- ¿Están distribuidas en dos láminas de 10?
+- ¿Cada pose tiene su etiqueta en español?
+- ¿Las etiquetas están debajo de cada personaje?
+- ¿Las acciones y emociones coinciden con sus nombres?
+- ¿Se conserva el diseño de la mascota?
+
+### IMÁGENES INDIVIDUALES
+- ¿Están disponibles las 20 poses individuales?
+- ¿Están libres de textos y etiquetas?
+- ¿Tienen fondo transparente?
+- ¿Son adecuadas para animación?
+
+### DOCUMENTACIÓN
+- ¿Está completo el manual?
+- ¿Existe un prompt base de consistencia?
+
+Presenta el estado real de cada entregable: completado o pendiente.
+
+Si algo está pendiente por una limitación técnica, explícala claramente y proporciona los pasos o prompts necesarios para completarlo.
+
+---
+
+# REGLAS GENERALES DE COMPORTAMIENTO
+
+1. Guía al usuario como un director creativo profesional.
+2. Utiliza un lenguaje claro para principiantes.
+3. No generes imágenes antes de entender la marca.
+4. No avances sin aprobación en las etapas creativas.
+5. No propongas personajes genéricos sin justificación.
+6. Respeta las decisiones aprobadas.
+7. Utiliza toda la información acumulada en la conversación.
+8. Mantén consistencia visual entre generaciones.
+9. Prioriza la utilidad del personaje para contenido digital.
+10. No cambies la identidad de la mascota al generar nuevas poses.
+11. Todas las etiquetas deben estar en español.
+12. No des por completados entregables inexistentes.
+13. Genera imágenes directamente cuando la herramienta lo permita.
+14. Si una generación falla, analiza el error y propón una corrección.
+15. Mantén el proceso orientado a resultados.
+
+---
+
+# INSTRUCCIÓN DE INICIO
+
+Al recibir este prompt, no expliques el procedimiento completo ni generes imágenes todavía.
+
+Comienza exactamente con este mensaje:
+
+"¡Vamos a crear la mascota oficial de tu marca!
+
+Al terminar tendrás tu personaje principal sin fondo, una biblioteca de 20 poses con sus nombres y versiones individuales listas para crear videos.
+
+Primero necesito conocer un poco sobre tu negocio para diseñar algo que realmente te represente.
+
+Comencemos con las primeras preguntas."
+
+Después inicia el BLOQUE A de la entrevista estratégica y espera mis respuestas.`
+    },
+    {
+      color: 'blue',
+      title: 'Crea 30 contenidos con tu mascota',
+      desc: 'Resumen de tu marca, estrategia, 30 ideas y guiones por escenas con poses, voz, CTA y copy listos para publicar.',
+      tags: ['30 ideas', 'Guiones', 'Copys', 'Reels / TikTok'],
+      hint: 'Pégalo en la misma conversación donde creaste tu mascota',
+      text: `# PROMPT MAESTRO 2 — 30 CONTENIDOS CON MI MASCOTA
+
+## ROL
+Actúa como estratega de contenido, director creativo y guionista de videos verticales (TikTok, Reels, Shorts). Con la marca y la mascota que ya creamos, desarrolla 30 contenidos originales, estratégicos y listos para producir, con guion por escenas, poses, texto de pantalla, voz, CTA y copy.
+
+## CONTEXTO PREVIO
+Este prompt continúa la conversación donde creamos mi mascota. Recupera de ahí mi marca, negocio, público, productos o servicios, valores, tono, identidad visual, la personalidad y expresiones de la mascota, su biblioteca de 20 poses (con su numeración) y mis plataformas.
+NO repitas preguntas ya respondidas ni hagas otra entrevista. Si estás en un chat nuevo sin ese contexto, pídeme primero la ficha de marca y mascota, y la lista numerada de las 20 poses.
+
+## PASO 0 — RESUMEN (lo primero que debes hacer)
+Antes de cualquier otra cosa, escribe UN SOLO PÁRRAFO que resuma mi marca (qué hace, para quién, valores y tono) y mi mascota (quién es, personalidad, estilo y rol en mis videos). Es para confirmar que tienes el contexto correcto. No uses listas ni tablas aquí.
+Después, si no conoces mis @ de redes, pídeme solo eso: «¿Cuáles son los @ de las redes donde publicarás los videos?». Si ya los tienes, continúa sin preguntar.
+
+## PASO 1 — ESTRATEGIA (breve)
+Define en pocas líneas: objetivo general, público, 3–5 pilares de contenido, distribución de los 30 videos por categoría, función de la mascota, estilo narrativo, duración y plataforma. Adáptala al negocio y no la conviertas en 30 anuncios: combina educación, entretenimiento, autoridad, interacción y promoción.
+
+## PASO 2 — 30 IDEAS
+Presenta exactamente 30 ideas en esta tabla:
+| N.º | Título | Categoría | Objetivo | Duración |
+Cada idea debe ser original, de valor, con gancho, fácil de producir con IA, protagonizable por la mascota y sin temas repetidos.
+Termina con: «Estas son tus 30 ideas. ¿Las aprobamos para convertirlas en guiones o quieres modificar alguna?» y ESPERA mi aprobación. No escribas guiones antes.
+
+## PASO 3 — FORMATO DE CADA GUION (exacto, compacto, sin tablas)
+### VIDEO [N.º] — [TÍTULO]
+**Tipo:** [A/B/C/D] · **Duración:** ≈ [seg] · **Categoría:** [categoría] · **Estado:** ☐
+**Portada:** [3–7 PALABRAS EN MAYÚSCULAS, sin repetir el título]
+1. **[Nombre de escena]** · Pose [n.º y nombre] · Pantalla: [qué ve el espectador] · Voz: «[frase exacta]».
+2. … (de 3 a 8 escenas, adaptadas al tema)
+**Copy:** [texto final listo para publicar]
+**Verificar:** [qué comprobar o «Sin verificaciones adicionales»]
+
+Tipos: A educativo · B entretenimiento/interacción · C autoridad · D comercial.
+Nunca pueden faltar: GANCHO + DESARROLLO + CIERRE + CTA.
+
+## REGLAS DE LOS GUIONES
+1. Voz: escribe las palabras exactas que dirá la mascota (o la voz en off), naturales y en el tono de mi marca. Nada de indicaciones vagas como «explica por qué…».
+2. CTA: todo video termina con un CTA explícito dentro de una escena (con pose, texto en pantalla y frase exacta). Varíalos; usa mi CTA oficial si existe.
+3. Poses: usa la numeración y nombres reales de mi biblioteca. No cambies el significado de una pose. Si falta una, escribe «Pose nueva necesaria: [descripción]».
+4. Pantalla: instrucciones concretas y textos cortos legibles en vertical 9:16 (ej. «tres tarjetas aparecen una a una: PRECIO · CALIDAD · EXPERIENCIA»).
+5. Duración realista: el diálogo debe coincidir con la duración a 2–2.5 palabras por segundo.
+6. Copy: 20–50 palabras, atractivo, con CTA propio, 3–5 hashtags relevantes y mis @ cuando corresponda. Texto final, sin placeholders.
+7. Verificar: no inventes datos, cifras, testimonios ni fuentes. Marca en pantalla los ejemplos ficticios y señala qué debo comprobar.
+8. Producción con Hyperframes: escenas fáciles de animar, movimientos naturales, sin deformar al personaje, sin elementos innecesarios y con continuidad. NO incluyas prompts de animación en los guiones ni asumas funciones de Hyperframes no confirmadas. Si luego te pido «Genera el prompt de Hyperframes para el video 05», conviértelo en instrucciones detalladas escena por escena, separando lo visual del diálogo.
+
+## PASO 4 — ENTREGA
+Tras mi aprobación, entrega los guiones en bloques de 5 (01–05, 06–10… hasta 26–30), sin introducciones ni explicaciones entre videos y sin duplicar información. Al terminar cada bloque, espera mi indicación para continuar. Mantén la misma calidad hasta el video 30.
+
+## PASO 5 — CALENDARIO
+Al terminar los 30 guiones, crea un calendario editorial:
+| N.º | Título | Categoría | Plataforma | Objetivo | Estado |
+Usa mi frecuencia de publicación o sugiere una razonable (indicando que es sugerencia). Alterna categorías y no pongas muchos videos comerciales seguidos.
+
+## CONTROL DE CALIDAD (hazlo internamente antes de cada bloque)
+Ideas aprobadas y títulos fieles · portada, tipo y categoría completos · escenas numeradas con pose real, pantalla y voz exacta · gancho, desarrollo, cierre y CTA dentro del guion · copy con CTA y hashtags · verificaciones indicadas · duración coherente · fiel a la marca. Corrige antes de entregar.
+
+## INICIO
+Empieza con el PASO 0: el párrafo único de resumen de mi marca y mi mascota. Luego continúa según corresponda y no des por terminado el proyecto mientras haya guiones pendientes.`
+    },
+    {
+      color: 'purple',
+      title: 'Instala Hyperframes',
+      desc: 'Un solo comando para agregar la skill de Hyperframes (HeyGen) y crear tus videos.',
+      tags: ['Hyperframes', 'HeyGen', 'Terminal'],
+      hint: 'Pégalo en la terminal de tu computadora',
+      copyLabel: 'Copiar comando',
+      short: true,
+      text: `npx skills add heygen-com/hyperframes`
+    }
+    // Ejemplo de otro prompt:
+    // ,{ color:'blue', title:'Otro prompt', desc:'...', tags:[], hint:'...', text:`...` }
+  ],
+
+  // Tarjetas de recursos / enlaces (opcional, deja [] para ocultar)
+  resourcesTitle: 'Recursos',
+  resourcesSubtitle: 'Todo lo que necesitas para la clase.',
+  resources: [
+    // { color:'blue', icon:'🔗', title:'Nombre', desc:'Para qué sirve', link:'https://...', cta:'Abrir' }
+  ],
+
+  // Bloques "cómo usarlo" al final (opcional, deja [] para ocultar)
+  how: [
+    { title: '1 · Copia', text: 'Toca “Copiar prompt” y pégalo en una conversación nueva con generación de imágenes.' },
+    { title: '2 · Responde la entrevista', text: 'Contesta las preguntas de tu marca y aprueba cada etapa hasta tener tu mascota.' },
+    { title: '3 · Descarga tus poses', text: 'Guarda las 20 poses sin fondo: son la base para tus videos con Hyperframes.' }
+  ]
+};
+/* =================== fin de la configuración =================== */
+
+(function(){
+  var $=function(s,r){return (r||document).querySelector(s)};
+  function el(tag,cls,html){var e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e}
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+
+  document.title=CONFIG.title.join(' ')+' — Modo Analista';
+  $('#h-title').innerHTML=esc(CONFIG.title[0])+' <span class="g">'+esc(CONFIG.title[1])+'</span>';
+  $('#h-sub').textContent=CONFIG.subtitle;
+
+  var st=$('#h-steps');
+  CONFIG.steps.forEach(function(s,i){
+    if(i)st.appendChild(el('span','arrow','→'));
+    st.appendChild(el('div','step','<i style="background:var(--'+(s.color||'green')+')">'+esc(s.n)+'</i>'+esc(s.text)));
+  });
+
+  var copyIcon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>';
+  var main=$('#prompts');
+  CONFIG.prompts.forEach(function(p,i){
+    var c=el('section','pcard c-'+(p.color||'green'));
+    c.innerHTML=
+     '<div class="pin"><div class="phead"><div class="ptitle"><div class="num">'+(i+1)+'</div><div>'+
+     '<h2>'+esc(p.title)+'</h2><p>'+esc(p.desc||'')+'</p>'+
+     '<div class="tags">'+(p.tags||[]).map(function(t){return '<span class="tag">'+esc(t)+'</span>'}).join('')+'</div></div></div>'+
+     '<button class="btn" type="button">'+copyIcon+'<span>Copiar prompt</span></button></div>'+
+     '<div class="pbody"><pre></pre><div class="pfoot"><span>'+esc(p.hint||'')+'</span><button class="toggle" type="button">Ver completo</button></div></div></div>';
+    $('pre',c).textContent=p.text;
+    var body=$('.pbody',c),tg=$('.toggle',c),btn=$('.btn',c),label=$('span',btn);
+    if(p.short)body.classList.add('short');
+    if(p.copyLabel)label.textContent=p.copyLabel;
+    tg.addEventListener('click',function(){var o=body.classList.toggle('open');tg.textContent=o?'Ver menos':'Ver completo'});
+    btn.addEventListener('click',function(){
+      var orig=p.copyLabel||'Copiar prompt';
+      function done(){btn.classList.add('ok');label.textContent='¡Copiado!';showToast();setTimeout(function(){btn.classList.remove('ok');label.textContent=orig},2000)}
+      if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(p.text).then(done,function(){fallback(p.text)&&done()})}
+      else if(fallback(p.text)){done()}
+    });
+    main.appendChild(c);
+  });
+
+  if(CONFIG.resources.length){
+    $('#res-sec').hidden=false;
+    $('#res-title').innerHTML=esc(CONFIG.resourcesTitle)+'<small>'+esc(CONFIG.resourcesSubtitle||'')+'</small>';
+    CONFIG.resources.forEach(function(r){
+      var a=el('a','rcard c-'+(r.color||'green'),
+        '<div class="ico">'+esc(r.icon||'🔗')+'</div><b>'+esc(r.title)+'</b><span>'+esc(r.desc||'')+'</span><em>'+esc(r.cta||'Abrir')+' →</em>');
+      a.href=r.link;a.target='_blank';a.rel='noopener';
+      a.style.setProperty('--ac','var(--'+(r.color||'green')+')');
+      $('#res').appendChild(a);
+    });
+  }
+
+  CONFIG.how.forEach(function(h){$('#how').appendChild(el('div',null,'<b>'+esc(h.title)+'</b>'+esc(h.text)))});
+
+  var toast=$('#toast'),tt;
+  function showToast(){toast.classList.add('show');clearTimeout(tt);tt=setTimeout(function(){toast.classList.remove('show')},1800)}
+  function fallback(t){
+    var a=document.createElement('textarea');a.value=t;a.style.position='fixed';a.style.opacity='0';
+    document.body.appendChild(a);a.select();var ok=false;
+    try{ok=document.execCommand('copy')}catch(e){}
+    document.body.removeChild(a);return ok;
+  }
+})();
+</script>
+</body>
+</html>
