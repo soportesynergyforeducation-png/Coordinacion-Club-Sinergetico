@@ -34,7 +34,9 @@ nav{padding:26px 0;display:flex;justify-content:space-between;align-items:center
 nav a.link{color:var(--mut);text-decoration:none;font-size:14px;font-weight:500}
 nav a.link:hover{color:var(--green)}
 
-.hero{padding:48px 0 56px}
+.hero{padding:48px 0 56px;display:grid;grid-template-columns:1fr auto;gap:28px;align-items:center}
+.modo{width:clamp(170px,24vw,280px);aspect-ratio:182/199;object-fit:cover;-webkit-mask-image:radial-gradient(ellipse 64% 64% at 50% 48%,#000 55%,transparent 100%);mask-image:radial-gradient(ellipse 64% 64% at 50% 48%,#000 55%,transparent 100%)}
+.pav{width:76px;height:76px;border-radius:18px;object-fit:cover;object-position:50% 20%;border:1px solid var(--c1);align-self:center}
 .hero h1{font-weight:900;font-size:clamp(40px,8vw,88px);line-height:.98;letter-spacing:-.025em;text-transform:uppercase}
 .hero h1 .g{background:linear-gradient(180deg,#7dffc4,#1fe58a 60%,#0fa863);-webkit-background-clip:text;background-clip:text;color:transparent;display:block}
 .hero p{margin-top:22px;color:var(--mut);font-size:clamp(16px,2.2vw,20px);max-width:560px}
@@ -80,6 +82,7 @@ footer{padding:30px 0 50px;text-align:center;color:var(--mut);font-size:13px;bor
 
 .toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,30px);opacity:0;background:#fff;color:#04130b;font-weight:700;padding:12px 22px;border-radius:12px;font-size:14px;transition:.25s;pointer-events:none;z-index:9}
 .toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:700px){.hero{grid-template-columns:1fr}.modo{width:190px;margin:0 auto;order:-1}.pav{display:none}}
 @media(max-width:560px){.phead{padding:20px 18px 14px}.pbody{margin:0 14px 14px}.btn{width:100%;justify-content:center}.arrow{display:none}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 </style>
@@ -92,6 +95,7 @@ footer{padding:30px 0 50px;text-align:center;color:var(--mut);font-size:13px;bor
   </nav>
 
   <header class="hero">
+    <div class="htext">
     <h1>Crea y anima<span class="g">tu logo con IA</span></h1>
     <p>De una idea a una identidad visual en movimiento. Copia cada prompt, pégalo en tu IA y sigue el proceso.</p>
     <div class="steps">
@@ -101,6 +105,8 @@ footer{padding:30px 0 50px;text-align:center;color:var(--mut);font-size:13px;bor
       <span class="arrow">→</span>
       <div class="step"><i>✦</i>Anímalo con tu IA de video</div>
     </div>
+    </div>
+    <img class="modo" src="../img/modo/pose13.png" alt="Modo, la mascota, con el pulgar arriba" width="182" height="199"/>
   </header>
 
   <section class="pcard a" id="prompt1">
@@ -114,6 +120,7 @@ footer{padding:30px 0 50px;text-align:center;color:var(--mut);font-size:13px;bor
             <div class="tags"><span class="tag">Simple</span><span class="tag">Significativo</span><span class="tag">Singular</span><span class="tag">Escalable</span></div>
           </div>
         </div>
+        <img class="pav" src="../img/modo/pose23.png" alt="" width="76" height="76"/>
         <button class="btn" data-copy="p1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg><span>Copiar prompt</span></button>
       </div>
       <div class="pbody" data-body="p1">
@@ -134,6 +141,7 @@ footer{padding:30px 0 50px;text-align:center;color:var(--mut);font-size:13px;bor
             <div class="tags"><span class="tag">Análisis</span><span class="tag">Nicho</span><span class="tag">Concepto</span><span class="tag">JSON final</span></div>
           </div>
         </div>
+        <img class="pav" src="../img/modo/pose20.png" alt="" width="76" height="76"/>
         <button class="btn" data-copy="p2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg><span>Copiar prompt</span></button>
       </div>
       <div class="pbody" data-body="p2">

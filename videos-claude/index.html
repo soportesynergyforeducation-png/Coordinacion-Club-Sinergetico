@@ -35,7 +35,9 @@ nav{padding:26px 0;display:flex;justify-content:space-between;align-items:center
 nav a.link{color:var(--mut);text-decoration:none;font-size:14px;font-weight:500}
 nav a.link:hover{color:var(--green)}
 
-.hero{padding:48px 0 56px}
+.hero{padding:48px 0 56px;display:grid;grid-template-columns:1fr auto;gap:28px;align-items:center}
+.modo{width:clamp(170px,24vw,280px);aspect-ratio:182/199;object-fit:cover;-webkit-mask-image:radial-gradient(ellipse 64% 64% at 50% 48%,#000 55%,transparent 100%);mask-image:radial-gradient(ellipse 64% 64% at 50% 48%,#000 55%,transparent 100%)}
+.pav{width:76px;height:76px;border-radius:18px;object-fit:cover;object-position:50% 20%;border:1px solid var(--c1);align-self:center}
 .hero h1{font-weight:900;font-size:clamp(40px,8vw,88px);line-height:.98;letter-spacing:-.025em;text-transform:uppercase}
 .hero h1 .g{background:linear-gradient(180deg,#7dffc4,#1fe58a 60%,#0fa863);-webkit-background-clip:text;background-clip:text;color:transparent;display:block}
 .hero p{margin-top:22px;color:var(--mut);font-size:clamp(16px,2.2vw,20px);max-width:560px}
@@ -91,6 +93,7 @@ footer{padding:30px 0 50px;text-align:center;color:var(--mut);font-size:13px;bor
 
 .toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,30px);opacity:0;background:#fff;color:#04130b;font-weight:700;padding:12px 22px;border-radius:12px;font-size:14px;transition:.25s;pointer-events:none;z-index:9}
 .toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:700px){.hero{grid-template-columns:1fr}.modo{width:190px;margin:0 auto;order:-1}.pav{display:none}}
 @media(max-width:560px){.phead{padding:20px 18px 14px}.pbody{margin:0 14px 14px}.btn{width:100%;justify-content:center}.arrow{display:none}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 </style>
@@ -103,9 +106,12 @@ footer{padding:30px 0 50px;text-align:center;color:var(--mut);font-size:13px;bor
   </nav>
 
   <header class="hero">
+    <div class="htext">
     <h1 id="h-title">Título de la <span class="g">mentoría</span></h1>
     <p id="h-sub"></p>
     <div class="steps" id="h-steps"></div>
+    </div>
+    <img class="modo" id="h-img" alt="Modo, la mascota" width="182" height="199"/>
   </header>
 
   <main id="prompts"></main>
@@ -129,6 +135,7 @@ footer{padding:30px 0 50px;text-align:center;color:var(--mut);font-size:13px;bor
    ===================================================================== */
 var CONFIG = {
   title: ['Crea videos con Claude', 'sin salir a cámara'],          // [parte blanca, parte verde]
+  heroImg: '../img/modo/pose01.png',   // Modo en el encabezado
   subtitle: 'Crea la mascota de tu marca y conviértela en el rostro de tus videos para TikTok e Instagram.',
 
   // Pasos que aparecen bajo el título (opcional, deja [] para ocultar)
@@ -143,6 +150,7 @@ var CONFIG = {
     {
       color: 'green',
       title: 'Crea tu mascota de marca',
+      img: '../img/modo/pose23.png',
       desc: 'Entrevista guiada, 3 propuestas de personaje, mascota sin fondo, 20 poses y manual de consistencia.',
       tags: ['Mascota', '20 poses', 'Sin fondo', 'Manual'],
       hint: 'Pégalo en una conversación nueva con generación de imágenes',
@@ -747,6 +755,7 @@ Después inicia el BLOQUE A de la entrevista estratégica y espera mis respuesta
     {
       color: 'blue',
       title: 'Crea 30 contenidos con tu mascota',
+      img: '../img/modo/pose14.png',
       desc: 'Resumen de tu marca, estrategia, 30 ideas y guiones por escenas con poses, voz, CTA y copy listos para publicar.',
       tags: ['30 ideas', 'Guiones', 'Copys', 'Reels / TikTok'],
       hint: 'Pégalo en la misma conversación donde creaste tu mascota',
@@ -811,6 +820,7 @@ Empieza con el PASO 0: el párrafo único de resumen de mi marca y mi mascota. L
     {
       color: 'purple',
       title: 'Instala Hyperframes',
+      img: '../img/modo/pose17.png',
       desc: 'Un solo comando para agregar la skill de Hyperframes (HeyGen) y crear tus videos.',
       tags: ['Hyperframes', 'HeyGen', 'Terminal'],
       hint: 'Pégalo en la terminal de tu computadora',
@@ -846,6 +856,7 @@ Empieza con el PASO 0: el párrafo único de resumen de mi marca y mi mascota. L
   document.title=CONFIG.title.join(' ')+' — Modo Analista';
   $('#h-title').innerHTML=esc(CONFIG.title[0])+' <span class="g">'+esc(CONFIG.title[1])+'</span>';
   $('#h-sub').textContent=CONFIG.subtitle;
+  $('#h-img').src=CONFIG.heroImg;
 
   var st=$('#h-steps');
   CONFIG.steps.forEach(function(s,i){
@@ -861,7 +872,7 @@ Empieza con el PASO 0: el párrafo único de resumen de mi marca y mi mascota. L
      '<div class="pin"><div class="phead"><div class="ptitle"><div class="num">'+(i+1)+'</div><div>'+
      '<h2>'+esc(p.title)+'</h2><p>'+esc(p.desc||'')+'</p>'+
      '<div class="tags">'+(p.tags||[]).map(function(t){return '<span class="tag">'+esc(t)+'</span>'}).join('')+'</div></div></div>'+
-     '<button class="btn" type="button">'+copyIcon+'<span>Copiar prompt</span></button></div>'+
+     (p.img?'<img class="pav" src="'+esc(p.img)+'" alt="" width="76" height="76"/>':'')+'<button class="btn" type="button">'+copyIcon+'<span>Copiar prompt</span></button></div>'+
      '<div class="pbody"><pre></pre><div class="pfoot"><span>'+esc(p.hint||'')+'</span><button class="toggle" type="button">Ver completo</button></div></div></div>';
     $('pre',c).textContent=p.text;
     var body=$('.pbody',c),tg=$('.toggle',c),btn=$('.btn',c),label=$('span',btn);
