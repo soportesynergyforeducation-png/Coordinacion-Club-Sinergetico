@@ -950,13 +950,14 @@ Empieza con el PASO 0: el párrafo único de resumen de mi marca y mi mascota. L
 <script>
 (function(){
   var sec=document.getElementById('presentacion'),N=+sec.dataset.count,i=0;
+  var base=location.protocol==='file:'?'':'/videos-claude/';
   var stage=document.getElementById('stage'),img=document.getElementById('slide'),cnt=document.getElementById('dcnt'),th=document.getElementById('thumbs');
   function p(n){return (n<10?'0':'')+n}
-  function src(n){return 'slides/slide-'+p(n)+'.jpg'}
+  function src(n){return base+'slides/slide-'+p(n)+'.jpg'}
   var tb=[];
   for(var n=1;n<=N;n++)(function(n){
     var b=document.createElement('button');b.type='button';b.setAttribute('aria-label','Ir a la diapositiva '+n);
-    b.innerHTML='<img loading="lazy" alt="" src="slides/t-'+p(n)+'.jpg">';
+    b.innerHTML='<img loading="lazy" alt="" src="'+base+'slides/t-'+p(n)+'.jpg">';
     b.addEventListener('click',function(){show(n-1)});th.appendChild(b);tb.push(b);
   })(n);
   function show(k){
