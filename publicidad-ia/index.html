@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Publicidad con IA — Modo Analista</title>
+<meta name="description" content="Crea publicidad para tu negocio con IA: prompt maestro, storyboard y video de 10 segundos para redes."/>
+<meta name="theme-color" content="#050807"/>
+<link rel="icon" type="image/png" href="/img/modo/favicon.png"/>
+<link rel="apple-touch-icon" href="/img/modo/apple-touch-icon.png"/>
+<meta name="robots" content="noindex"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Rajdhani:wght@600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#050807; --line:rgba(255,255,255,.09);
+  --txt:#f2f5f4; --mut:#9aa6a1;
+  --green:#1fe58a; --purple:#9b6bff; --blue:#35a8ff; --amber:#ffb23e;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--txt);font-family:'Inter',system-ui,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;z-index:-1;
+  background:
+   radial-gradient(900px 500px at 85% -10%,rgba(31,229,138,.16),transparent 60%),
+   radial-gradient(700px 500px at -10% 40%,rgba(31,229,138,.07),transparent 60%),
+   radial-gradient(800px 600px at 60% 110%,rgba(155,107,255,.08),transparent 60%)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+
+.brand{font-family:'Rajdhani',sans-serif;font-weight:700;letter-spacing:.04em;font-size:22px;text-transform:uppercase;display:inline-flex;gap:8px;align-items:center}
+.brand::before,.brand::after{content:"";width:8px;height:26px;border:2px solid var(--green);border-right:0}
+.brand::after{border:2px solid var(--green);border-left:0}
+.brand b{color:var(--green)}
+.brand span{color:#dfe5e2}
+nav{padding:26px 0;display:flex;justify-content:space-between;align-items:center;gap:16px}
+nav .nl{display:flex;gap:22px}
+nav a.link{color:var(--mut);text-decoration:none;font-size:14px;font-weight:500}
+nav a.link:hover{color:var(--green)}
+
+.hero{padding:40px 0 56px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:20px;align-items:center}
+.modo-wrap{position:relative;display:grid;place-items:center;width:clamp(240px,29vw,340px)}
+.modo{width:100%;height:auto;display:block;border-radius:26px;border:1px solid rgba(31,229,138,.55);box-shadow:0 0 0 1px rgba(31,229,138,.08),0 24px 70px -18px rgba(31,229,138,.5),inset 0 0 40px rgba(0,0,0,.35)}
+.pav{width:76px;height:76px;border-radius:18px;object-fit:cover;object-position:50% 20%;border:1px solid var(--c1);align-self:center}
+.hero h1{font-weight:900;font-size:clamp(38px,6.2vw,76px);line-height:.98;letter-spacing:-.025em;text-transform:uppercase}
+.hero h1 .g{background:linear-gradient(180deg,#7dffc4,#1fe58a 60%,#0fa863);-webkit-background-clip:text;background-clip:text;color:transparent;display:block}
+.hero p{margin-top:22px;color:var(--mut);font-size:clamp(16px,2.2vw,20px);max-width:560px}
+.steps{margin-top:34px;display:flex;gap:14px;flex-wrap:wrap}
+.step{display:flex;align-items:center;gap:10px;padding:10px 16px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.03);font-size:14px;font-weight:600}
+.step i{font-style:normal;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:800;color:#04130b;background:var(--ac,var(--green))}
+.arrow{color:var(--green);align-self:center}
+
+.pcard{position:relative;margin:0 0 36px;border-radius:26px;padding:1px;
+  background:linear-gradient(160deg,var(--c1),rgba(255,255,255,.05) 40%,rgba(255,255,255,.03) 60%,var(--c1))}
+.pcard.c-green{--c1:rgba(31,229,138,.7);--ac:var(--green);--fg:#04130b}
+.pcard.c-purple{--c1:rgba(155,107,255,.75);--ac:var(--purple);--fg:#fff}
+.pcard.c-blue{--c1:rgba(53,168,255,.75);--ac:var(--blue);--fg:#031320}
+.pcard.c-amber{--c1:rgba(255,178,62,.75);--ac:var(--amber);--fg:#1c1100}
+.pin{background:linear-gradient(180deg,#0c1210,#060908);border-radius:25px;overflow:hidden;box-shadow:0 30px 80px -30px var(--c1)}
+.phead{padding:26px 26px 18px;display:flex;gap:18px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}
+.ptitle{display:flex;gap:16px;align-items:flex-start;flex:1;min-width:260px}
+.num{flex:none;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-weight:900;font-size:20px;color:var(--fg);background:var(--ac);box-shadow:0 0 28px -2px var(--ac)}
+.ptitle h2{font-size:clamp(22px,3.6vw,32px);font-weight:900;text-transform:uppercase;letter-spacing:-.01em;line-height:1.1}
+.ptitle p{color:var(--mut);margin-top:6px;font-size:15px}
+.tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.tag{font-size:12px;font-weight:600;padding:5px 12px;border-radius:999px;border:1px solid var(--line);color:#cdd6d2;background:rgba(255,255,255,.03)}
+
+.btn{cursor:pointer;border:0;font-family:inherit;display:inline-flex;align-items:center;gap:9px;padding:13px 22px;border-radius:14px;font-weight:800;font-size:15px;color:var(--fg);background:var(--ac);transition:transform .15s,box-shadow .2s,filter .2s;box-shadow:0 8px 30px -8px var(--ac);text-decoration:none}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.08)}
+.btn:active{transform:translateY(0) scale(.98)}
+.btn svg{width:18px;height:18px}
+.btn.ok{background:#fff;color:#04130b;box-shadow:0 8px 30px -8px #fff}
+
+.pbody{position:relative;margin:0 26px 26px;border:1px solid var(--line);border-radius:18px;background:#040605}
+.pbody pre{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:13.5px;line-height:1.7;color:#d3dcd8;white-space:pre-wrap;word-wrap:break-word;padding:22px;max-height:340px;overflow:auto;transition:max-height .4s ease}
+.pbody.open pre,.pbody.short pre{max-height:none}
+.pbody.short::after,.pbody.short .toggle{display:none}
+.pbody:not(.open)::after{content:"";position:absolute;left:1px;right:1px;bottom:56px;height:90px;background:linear-gradient(transparent,#040605);pointer-events:none}
+.pfoot{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 18px;border-top:1px solid var(--line);font-size:13px;color:var(--mut)}
+.toggle{cursor:pointer;background:none;border:1px solid var(--line);color:var(--txt);font-family:inherit;font-weight:600;font-size:13px;padding:8px 16px;border-radius:10px}
+.toggle:hover{border-color:var(--ac);color:var(--ac)}
+
+.sec{margin:56px 0 22px;font-weight:900;font-size:clamp(24px,4vw,36px);text-transform:uppercase;letter-spacing:-.01em}
+.sec small{display:block;font-size:15px;font-weight:500;color:var(--mut);text-transform:none;letter-spacing:0;margin-top:6px}
+.res{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:56px}
+.rcard{display:flex;flex-direction:column;gap:10px;padding:22px;border:1px solid var(--line);border-radius:20px;background:linear-gradient(180deg,#0c1210,#060908);text-decoration:none;color:inherit;transition:transform .2s,border-color .2s}
+.rcard:hover{transform:translateY(-3px);border-color:var(--ac)}
+.rcard .ico{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-size:20px;background:rgba(255,255,255,.05);border:1px solid var(--line)}
+.rcard b{font-size:17px}
+.rcard span{color:var(--mut);font-size:14px}
+.rcard em{margin-top:auto;font-style:normal;font-weight:700;font-size:14px;color:var(--ac)}
+
+.how{margin:10px 0 60px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
+.how div{padding:20px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.025);font-size:14px;color:var(--mut)}
+.how b{display:block;color:var(--txt);font-size:15px;margin-bottom:4px}
+footer{padding:30px 0 50px;text-align:center;color:var(--mut);font-size:13px;border-top:1px solid var(--line)}
+
+.toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,30px);opacity:0;background:#fff;color:#04130b;font-weight:700;padding:12px 22px;border-radius:12px;font-size:14px;transition:.25s;pointer-events:none;z-index:9}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:700px){.hero{grid-template-columns:1fr}.modo-wrap{width:210px;margin:0 auto;order:-1}.pav{display:none}}
+@media(max-width:560px){.phead{padding:20px 18px 14px}.pbody{margin:0 14px 14px}.btn{width:100%;justify-content:center}.arrow{display:none}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav>
+    <div class="brand"><b>Modo</b><span>Analista</span></div>
+    <a class="link" href="#prompts">Prompts ↓</a>
+  </nav>
+
+  <header class="hero">
+    <div class="htext">
+    <h1 id="h-title">Título de la <span class="g">mentoría</span></h1>
+    <p id="h-sub"></p>
+    <div class="steps" id="h-steps"></div>
+    </div>
+    <div class="modo-wrap"><img class="modo" id="h-img" alt="Modo, la mascota" width="182" height="199"/></div>
+  </header>
+
+  
+<main id="prompts"></main>
+
+  <section id="res-sec" hidden>
+    <h2 class="sec" id="res-title"></h2>
+    <div class="res" id="res"></div>
+  </section>
+
+  <div class="how" id="how"></div>
+
+  <footer>Modo Analista · Material de clase</footer>
+</div>
+<div class="toast" id="toast">¡Prompt copiado!</div>
+
+<script>
+/* =====================================================================
+   CONFIGURACIÓN — edita solo este bloque
+   Colores de tarjeta disponibles: green | purple | blue | amber
+   Dentro de los prompts usa comillas invertidas (`) y evita escribir ${ o `.
+   ===================================================================== */
+var CONFIG = {
+  title: ['Crea publicidad', 'para tu negocio con IA'],
+  heroImg: '../img/modo/pose20.png',
+  subtitle: 'Un solo prompt que conoce tu negocio, crea el storyboard de tu producto y te deja listo el video publicitario de 10 segundos para tus redes.',
+
+  steps: [
+    { n: '1', text: 'Cuéntale tu negocio a la IA', color: 'green' },
+    { n: '2', text: 'Genera tu storyboard', color: 'purple' },
+    { n: '✦', text: 'Crea tu video en Google Flow', color: 'green' }
+  ],
+
+  prompts: [
+    {
+      color: 'green',
+      img: '../img/modo/pose23.png',
+      title: 'Crea publicidad para tu negocio',
+      desc: 'Diagnóstico de tu marca en 10 preguntas, concepto creativo, storyboard visual y prompt listo para Google Flow.',
+      tags: ['Storyboard', 'Video de 10 s', 'Google Flow', 'Formato 9:16'],
+      hint: 'Pégalo en una conversación nueva con generación de imágenes',
+      text: `# PROMPT MAESTRO
+## CREA PUBLICIDAD PARA TU NEGOCIO CON IA
+
+Actúa como un equipo profesional de estrategia de marca, marketing, dirección creativa y producción audiovisual especializado en anuncios para redes sociales.
+
+Tu objetivo es ayudarme a crear publicidad profesional para mi negocio utilizando inteligencia artificial, aunque no tenga conocimientos de marketing, diseño o edición de video.
+
+Trabajaremos mediante un proceso guiado, sencillo e interactivo.
+
+**REGLAS GENERALES**
+
+- Hazme una sola pregunta a la vez.
+- Espera mi respuesta antes de continuar.
+- Utiliza lenguaje sencillo, sin tecnicismos innecesarios.
+- Adapta todas las preguntas y recomendaciones a mi tipo de negocio.
+- No inventes información sobre mi marca, productos, servicios o resultados.
+- Respeta las imágenes, fotografías, logotipos y materiales que proporcione.
+- No avances a la siguiente fase sin completar la anterior.
+- Prioriza resultados visuales y evita explicaciones extensas.
+- No generes materiales publicitarios hasta que apruebe el concepto creativo.
+
+---
+
+# FASE 1. DIAGNÓSTICO DE MARCA
+
+Realiza exactamente 10 preguntas, una por una, para conocer mi negocio.
+
+**Pregunta 1. Tipo de negocio**
+
+Pregúntame qué tipo de negocio tengo.
+
+Ofrece ejemplos como:
+- Producto físico
+- Servicio profesional
+- Marca personal
+- Producto digital
+- Negocio local
+- Otro
+
+**Pregunta 2. Nombre de la marca**
+
+Pregúntame cómo se llama mi negocio, marca o proyecto.
+
+**Pregunta 3. Oferta principal**
+
+Pregúntame qué producto o servicio quiero promocionar.
+
+Adapta la pregunta según mi tipo de negocio.
+
+**Pregunta 4. Cliente ideal**
+
+Ayúdame a identificar a quién quiero llegar con mi publicidad.
+
+**Pregunta 5. Problema o necesidad**
+
+Pregúntame qué problema resuelve mi producto o servicio o qué necesidad satisface.
+
+**Pregunta 6. Diferenciadores**
+
+Pregúntame por qué un cliente debería elegirme en lugar de otras opciones.
+
+**Pregunta 7. Personalidad de marca**
+
+Pregúntame cómo quiero que se perciba mi marca.
+
+Ofrece opciones como profesional, elegante, divertida, cercana, innovadora, premium, educativa o emocional.
+
+**Pregunta 8. Identidad visual**
+
+Pregúntame cuáles son mis colores, estilo visual y elementos representativos.
+
+Invítame a subir mi logotipo, fotografías de mi marca u otras referencias visuales si las tengo.
+
+Si proporciono imágenes, analízalas y utiliza su identidad visual sin modificar arbitrariamente los elementos originales.
+
+**Pregunta 9. Objetivo publicitario**
+
+Pregúntame qué quiero conseguir con mi anuncio.
+
+Por ejemplo:
+- Dar a conocer mi marca.
+- Atraer seguidores.
+- Generar mensajes.
+- Conseguir clientes potenciales.
+- Vender un producto.
+- Promocionar un servicio.
+
+**Pregunta 10. Plataformas y llamada a la acción**
+
+Pregúntame dónde publicaré el anuncio y qué quiero que haga la persona después de verlo.
+
+Por ejemplo: seguir mi cuenta, enviar un mensaje, visitar una página o comprar.
+
+---
+
+# FASE 2. DOCUMENTO DE CONTEXTO
+
+Cuando responda las 10 preguntas:
+
+1. Organiza toda la información recopilada.
+2. Resume la identidad, propuesta de valor, público objetivo y objetivo publicitario de mi marca.
+3. Incluye una descripción de la identidad visual.
+4. Registra qué fotografías, logotipos o archivos proporcioné.
+5. Genera un archivo Markdown descargable llamado \`contexto_marca.md\`.
+
+No inventes información faltante.
+
+Aclara que las imágenes originales deben conservarse por separado, ya que el archivo Markdown contiene su descripción y referencia, no las fotografías originales.
+
+Una vez generado el archivo, continúa automáticamente con la siguiente pregunta:
+
+**«¿Qué tipo de anuncio quieres crear?»**
+
+Ofrece tres opciones:
+
+A. **Cinematográfico:** visualmente impactante, con iluminación, movimientos de cámara y estética publicitaria.
+
+B. **UGC:** natural y auténtico, como un video grabado por una persona real recomendando o mostrando un producto o servicio.
+
+C. **Ambos:** crear una propuesta de cada estilo para comparar.
+
+Espera mi elección.
+
+---
+
+# FASE 3. MATERIAL VISUAL Y CONCEPTO
+
+Según mi tipo de negocio, solicítame una fotografía real que sirva como referencia principal.
+
+Adapta la solicitud:
+
+- **Producto físico:** fotografía del producto real.
+- **Marca personal:** fotografía de la persona.
+- **Servicio profesional:** fotografía de la persona, lugar de trabajo o material representativo.
+- **Producto digital:** captura, portada o representación visual real del producto.
+- **Negocio local:** fotografía del establecimiento, producto o servicio.
+
+Si ya proporcioné una fotografía adecuada, no vuelvas a solicitarla.
+
+Analiza la imagen y prepara un concepto publicitario breve que incluya:
+
+- Idea principal del anuncio.
+- Gancho para captar la atención.
+- Mensaje que comunicará.
+- Estilo visual.
+- Llamada a la acción.
+
+El concepto debe adaptarse al negocio, al público objetivo y al estilo elegido.
+
+**IMPORTANTE:** No generes todavía el storyboard ni las imágenes finales.
+
+Muéstrame el concepto y pregúntame si lo apruebo o quiero modificarlo.
+
+Si elegí ambos estilos, presenta un concepto cinematográfico y uno UGC, y permite aprobarlos por separado.
+
+---
+
+# FASE 4. STORYBOARD VISUAL
+
+Una vez aprobado el concepto, genera directamente una **IMAGEN DE STORYBOARD PUBLICITARIO**.
+
+El storyboard debe representar visualmente la secuencia del anuncio.
+
+**Características obligatorias:**
+
+- El anuncio final tendrá una duración máxima de 10 segundos.
+- Su formato final será vertical 9:16.
+- Decide automáticamente cuántas escenas necesita la historia.
+- La cantidad de escenas debe depender del contexto de la marca, el producto, el estilo y el ritmo publicitario.
+- No fuerces una cantidad fija de escenas.
+- Organiza las escenas en una sola imagen, mediante una cuadrícula ordenada.
+- Numera las escenas para identificar su secuencia.
+- Cada escena debe representar un momento visual diferente.
+- Mantén coherencia entre personajes, producto, iluminación, vestuario y entorno.
+- Prioriza imágenes sobre texto.
+- Evita saturar el storyboard con explicaciones.
+
+**Protección de identidad:**
+
+- Conserva los rasgos faciales de las personas de referencia.
+- Respeta las características reales del producto.
+- No inventes piezas, accesorios o características que no estén confirmadas.
+- Respeta los logotipos y colores de marca.
+- No inventes testimonios, resultados, certificaciones o afirmaciones comerciales.
+
+Si elegí ambos estilos, genera un storyboard independiente para cada uno.
+
+**ENTREGA PRINCIPAL:**
+
+La imagen del storyboard, no una tabla ni una descripción textual.
+
+Si puedes generar imágenes, utiliza esa capacidad directamente.
+
+Si no puedes generarlas, explica la limitación y proporciona una instrucción sencilla para crear el storyboard en una herramienta de generación de imágenes.
+
+---
+
+# FASE 5. PROMPT PARA GOOGLE FLOW
+
+Después de generar el storyboard visual, prepara **un único prompt listo para copiar en Google Flow por cada anuncio**.
+
+El prompt debe:
+
+1. Estar basado en el storyboard aprobado.
+2. Indicar que se utilizará la imagen del storyboard como referencia visual.
+3. Describir brevemente la secuencia y la intención del anuncio.
+4. Solicitar un video vertical 9:16.
+5. Establecer una duración objetivo máxima de 10 segundos.
+6. Mantener la identidad visual y los elementos originales.
+7. Solicitar movimientos naturales, ritmo publicitario y transiciones coherentes.
+8. Incorporar audio en español cuando corresponda.
+9. Incluir una llamada a la acción adecuada.
+10. Evitar que la cuadrícula o los números del storyboard aparezcan en el video final.
+
+Adapta el prompt al estilo:
+
+**Cinematográfico:** movimientos de cámara profesionales, iluminación cuidada, estética premium y diseño sonoro.
+
+**UGC:** movimientos naturales, apariencia auténtica, iluminación realista, actuación espontánea y lenguaje cercano.
+
+Escribe el prompt en inglés para las instrucciones visuales, pero especifica que cualquier diálogo hablado debe ser en español natural.
+
+No entregues prompts individuales para cada escena.
+
+No incluyas explicaciones técnicas extensas.
+
+Ten presente que Google Flow puede tener limitaciones de duración y de interpretación de storyboards. No prometas que todas las escenas se convertirán automáticamente en un solo video. Si fuera necesario, recomienda generar clips separados y unirlos, o recortar el resultado a 10 segundos.
+
+---
+
+# FASE 6. ENTREGA FINAL
+
+Al finalizar, entrega:
+
+1. **Storyboard visual:** imagen con las escenas del anuncio.
+2. **Prompt para Google Flow:** listo para copiar.
+3. **Recomendación breve:** cómo utilizar el storyboard y el prompt para generar el video.
+4. **Copy para Instagram:** texto corto para acompañar la publicación, con una llamada a la acción.
+
+Si elegí ambos estilos, separa claramente los materiales cinematográficos y UGC.
+
+Evita información innecesaria. El objetivo es que pueda crear mi anuncio de manera sencilla.
+
+---
+
+# COMIENZA AHORA
+
+Preséntate brevemente como mi asistente creativo publicitario.
+
+Explícame en una sola frase que vamos a crear un anuncio para mi negocio mediante inteligencia artificial.
+
+Después, hazme únicamente la **pregunta 1 de 10** y espera mi respuesta.`
+    }
+  ],
+
+  resourcesTitle: 'Recursos',
+  resourcesSubtitle: '',
+  resources: [],
+
+  how: [
+    { title: '1 · Copia y pega', text: 'Toca “Copiar prompt” y pégalo en una conversación nueva de tu IA con generación de imágenes.' },
+    { title: '2 · Responde y sube tu foto', text: 'Contesta las 10 preguntas de tu negocio y sube la foto real de tu producto cuando te la pida.' },
+    { title: '3 · Llévalo a Google Flow', text: 'Usa el storyboard como imagen de referencia, pega el prompt que te entrega y genera tu video vertical de 10 segundos.' }
+  ]
+};
+/* =================== fin de la configuración =================== */
+
+(function(){
+  var $=function(s,r){return (r||document).querySelector(s)};
+  function el(tag,cls,html){var e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e}
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+
+  document.title=CONFIG.title.join(' ')+' — Modo Analista';
+  $('#h-title').innerHTML=esc(CONFIG.title[0])+' <span class="g">'+esc(CONFIG.title[1])+'</span>';
+  $('#h-sub').textContent=CONFIG.subtitle;
+  $('#h-img').src=CONFIG.heroImg;
+
+  var st=$('#h-steps');
+  CONFIG.steps.forEach(function(s,i){
+    if(i)st.appendChild(el('span','arrow','→'));
+    st.appendChild(el('div','step','<i style="background:var(--'+(s.color||'green')+')">'+esc(s.n)+'</i>'+esc(s.text)));
+  });
+
+  var copyIcon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>';
+  var main=$('#prompts');
+  CONFIG.prompts.forEach(function(p,i){
+    var c=el('section','pcard c-'+(p.color||'green'));
+    c.innerHTML=
+     '<div class="pin"><div class="phead"><div class="ptitle"><div class="num">'+(i+1)+'</div><div>'+
+     '<h2>'+esc(p.title)+'</h2><p>'+esc(p.desc||'')+'</p>'+
+     '<div class="tags">'+(p.tags||[]).map(function(t){return '<span class="tag">'+esc(t)+'</span>'}).join('')+'</div></div></div>'+
+     (p.img?'<img class="pav" src="'+esc(p.img)+'" alt="" width="76" height="76"/>':'')+'<button class="btn" type="button">'+copyIcon+'<span>Copiar prompt</span></button></div>'+
+     '<div class="pbody"><pre></pre><div class="pfoot"><span>'+esc(p.hint||'')+'</span><button class="toggle" type="button">Ver completo</button></div></div></div>';
+    $('pre',c).textContent=p.text;
+    var body=$('.pbody',c),tg=$('.toggle',c),btn=$('.btn',c),label=$('span',btn);
+    if(p.short)body.classList.add('short');
+    if(p.copyLabel)label.textContent=p.copyLabel;
+    tg.addEventListener('click',function(){var o=body.classList.toggle('open');tg.textContent=o?'Ver menos':'Ver completo'});
+    btn.addEventListener('click',function(){
+      var orig=p.copyLabel||'Copiar prompt';
+      function done(){btn.classList.add('ok');label.textContent='¡Copiado!';showToast();setTimeout(function(){btn.classList.remove('ok');label.textContent=orig},2000)}
+      if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(p.text).then(done,function(){fallback(p.text)&&done()})}
+      else if(fallback(p.text)){done()}
+    });
+    main.appendChild(c);
+  });
+
+  if(CONFIG.resources.length){
+    $('#res-sec').hidden=false;
+    $('#res-title').innerHTML=esc(CONFIG.resourcesTitle)+'<small>'+esc(CONFIG.resourcesSubtitle||'')+'</small>';
+    CONFIG.resources.forEach(function(r){
+      var a=el('a','rcard c-'+(r.color||'green'),
+        '<div class="ico">'+esc(r.icon||'🔗')+'</div><b>'+esc(r.title)+'</b><span>'+esc(r.desc||'')+'</span><em>'+esc(r.cta||'Abrir')+' →</em>');
+      a.href=r.link;a.target='_blank';a.rel='noopener';
+      a.style.setProperty('--ac','var(--'+(r.color||'green')+')');
+      $('#res').appendChild(a);
+    });
+  }
+
+  CONFIG.how.forEach(function(h){$('#how').appendChild(el('div',null,'<b>'+esc(h.title)+'</b>'+esc(h.text)))});
+
+  var toast=$('#toast'),tt;
+  function showToast(){toast.classList.add('show');clearTimeout(tt);tt=setTimeout(function(){toast.classList.remove('show')},1800)}
+  function fallback(t){
+    var a=document.createElement('textarea');a.value=t;a.style.position='fixed';a.style.opacity='0';
+    document.body.appendChild(a);a.select();var ok=false;
+    try{ok=document.execCommand('copy')}catch(e){}
+    document.body.removeChild(a);return ok;
+  }
+})();
+</script>
+
+
+</body>
+</html>
